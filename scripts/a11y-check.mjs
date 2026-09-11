@@ -77,17 +77,75 @@ check(
 );
 await page.keyboard.press("Escape");
 
-// --- Log out reaches the demo landing screen, which asks for no credentials ---
+// --- Log out reaches the sign-in screen, which asks for no credentials ---
 await page.getByRole("button", { name: /Account menu/ }).click();
 await page.getByRole("button", { name: "Log out" }).click();
-await page.waitForSelector(".demo-login__button");
+await page.waitForSelector(".sign-in__provider");
 check(
-  "demo landing collects no credentials",
-  (await page.locator("input[type=password], input[type=email], input[name*=user i]").count()) === 0,
+  "sign-in collects no credentials",
+  (await page.locator("input").count()) === 0,
 );
-await page.getByRole("button", { name: "Continue to demo" }).click();
+await page.getByRole("button", { name: /Log in with Clever Badges/ }).click();
 await page.waitForSelector(".dashboard");
-check("continue returns to the portal", (await page.locator(".dashboard").count()) === 1);
+check("signing in reaches the portal", (await page.locator(".dashboard").count()) === 1);
+
+// --- Portal-hosted pages are reachable and structured ---
+for (const [pageId, heading] of [
+  ["clever-badges", "Clever Badge"],
+  ["student-handbook", "Student Handbook"],
+  ["lunch-menu", "Lunch Menu"],
+  ["tech-helpdesk", "Technology Help Desk"],
+  ["mangan-schedule", "Daily Schedule"],
+]) {
+  await page.goto(`${URL}#/page/${pageId}`, { waitUntil: "networkidle" });
+  await page.waitForSelector(".resource-page__title");
+  const title = await page.locator(".resource-page__title").textContent();
+  check(`page ${pageId} renders`, title?.trim() === heading, title ?? "");
+}
+
+// --- The help desk ticket form works ---
+await page.goto(`${URL}#/page/tech-helpdesk`, { waitUntil: "networkidle" });
+await page.locator(".ticket-form__textarea").fill("Screen flickers when I open the lid.");
+await page.locator(".ticket-form__submit").click();
+await page.waitForSelector(".ticket-form__receipt");
+check("ticket form confirms a reference", /LUSD-\d{4}/.test(
+  (await page.locator(".ticket-form__receipt-title").textContent()) ?? "",
+));
+
+// --- Clever Library filters ---
+await page.goto(`${URL}#/library`, { waitUntil: "networkidle" });
+await page.waitForSelector(".library__chip");
+const allCount = await page.locator("#root .resource-tile").count();
+await page.locator(".library__chip", { hasText: /^Math$/ }).click();
+await page.waitForTimeout(200);
+const mathCount = await page.locator("#root .resource-tile").count();
+check("library filters by subject", mathCount > 0 && mathCount < allCount, `${mathCount} of ${allCount}`);
+
+// --- Notifications page ---
+await page.goto(`${URL}#/notifications`, { waitUntil: "networkidle" });
+await page.waitForSelector(".notifications-page__item");
+await page.locator(".notifications-page__mark").click();
+await page.waitForTimeout(150);
+check(
+  "marking all read clears the unread group",
+  (await page.locator(".notifications-page__item--unread").count()) === 0,
+);
+
+// --- Account settings changes the icon size the portal draws ---
+await page.goto(`${URL}#/account`, { waitUntil: "networkidle" });
+await page.waitForSelector(".account__choice");
+await page.locator(".account__choice", { hasText: /^Small/ }).click();
+await page.goto(URL, { waitUntil: "networkidle" });
+await page.waitForSelector(".resource-tile");
+const iconWidth = await page
+  .locator(".resource-tile__icon-container")
+  .first()
+  .evaluate((el) => el.getBoundingClientRect().width);
+check("icon size setting applies to the portal", Math.abs(iconWidth - 80) < 0.5, `${iconWidth}px`);
+await page.goto(`${URL}#/account`, { waitUntil: "networkidle" });
+await page.locator(".account__choice", { hasText: /^Large/ }).click();
+await page.goto(URL, { waitUntil: "networkidle" });
+await page.waitForSelector(".resource-tile");
 
 // --- Focus is always visible ---
 await page.keyboard.press("Tab");

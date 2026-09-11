@@ -5,20 +5,28 @@
  * `border-radius: 10%` in CSS, so the generated art is full-bleed square with no
  * rounding baked in.
  *
- * Three styles, matching how real ed-tech app icons are actually built:
+ * Four sources, in descending order of fidelity:
  *
- *   brand   the official mark and official brand hex from `simple-icons`
+ *   logo    the real full-colour brand logo from `@iconify-json/logos`
+ *   brand   the official single-colour mark and brand hex from `simple-icons`
  *   text    a wordmark or monogram on a brand-coloured ground, auto-fitted
  *   clever  the Clever "C" from Clever's own logo outline
+ *
+ * Anything dropped into assets/app-icons/ overrides the generated artwork for
+ * that id, so real vendor logos can be supplied without touching this script.
+ * See the "Application artwork" section of the README.
  */
-import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
+import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as simpleIcons from "simple-icons";
+import logoCollection from "@iconify-json/logos/icons.json" with { type: "json" };
 import { iconSpecs } from "./appIconSpecs.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = resolve(ROOT, "public", "app-icons");
+/** Real vendor logos dropped in here win over anything generated. */
+const OVERRIDE_DIR = resolve(ROOT, "assets", "app-icons");
 const SIZE = 128;
 
 /** Horizontal room a wordmark may use, leaving a margin on both sides. */
@@ -62,6 +70,33 @@ function fitTextSize(lines, override) {
   const widest = Math.max(...lines.map(estimateEm));
   const byWidth = TEXT_SAFE_WIDTH / widest;
   return Math.floor(Math.min(byWidth, MAX_TEXT_SIZE[lines.length] ?? 22));
+}
+
+/**
+ * The SVG Logos collection ships real multi-colour brand artwork on a 256-unit
+ * grid, so these tiles carry the actual logo rather than a single-colour trace.
+ */
+function renderLogoIcon(spec) {
+  const icon = logoCollection.icons[spec.logo];
+  if (!icon) throw new Error(`@iconify-json/logos has no entry for "${spec.logo}"`);
+
+  const grid = icon.width ?? logoCollection.width ?? 256;
+  const gridHeight = icon.height ?? logoCollection.height ?? grid;
+  const scale = spec.scale ?? 0.66;
+  const drawn = SIZE * scale;
+  const factor = drawn / Math.max(grid, gridHeight);
+  const offsetX = (SIZE - grid * factor) / 2;
+  const offsetY = (SIZE - gridHeight * factor) / 2;
+  const label = spec.label ?? spec.id;
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SIZE} ${SIZE}" width="${SIZE}" height="${SIZE}" role="img" aria-label="${escapeXml(label)}">
+  <title>${escapeXml(label)}</title>
+  <rect width="${SIZE}" height="${SIZE}" fill="${spec.bg ?? "#ffffff"}"/>
+  <g transform="translate(${offsetX.toFixed(2)} ${offsetY.toFixed(2)}) scale(${factor.toFixed(5)})">
+    ${icon.body}
+  </g>
+</svg>
+`;
 }
 
 function renderBrandIcon(spec) {
@@ -127,13 +162,30 @@ mkdirSync(OUT_DIR, { recursive: true });
 const written = new Set();
 for (const spec of iconSpecs) {
   if (written.has(spec.id)) throw new Error(`Duplicate icon id "${spec.id}"`);
-  const svg = spec.slug
-    ? renderBrandIcon(spec)
-    : spec.style === "clever"
-      ? renderCleverIcon(spec)
-      : renderTextIcon(spec);
+  const svg = spec.logo
+    ? renderLogoIcon(spec)
+    : spec.slug
+      ? renderBrandIcon(spec)
+      : spec.style === "clever"
+        ? renderCleverIcon(spec)
+        : renderTextIcon(spec);
   writeFileSync(resolve(OUT_DIR, `${spec.id}.svg`), svg, "utf8");
   written.add(spec.id);
+}
+
+// Real vendor logos supplied by hand replace the generated artwork.
+const OVERRIDE_EXTENSIONS = new Set([".svg", ".png", ".jpg", ".jpeg", ".webp", ".gif"]);
+const overrides = [];
+if (existsSync(OVERRIDE_DIR)) {
+  for (const file of readdirSync(OVERRIDE_DIR)) {
+    const extension = extname(file).toLowerCase();
+    if (!OVERRIDE_EXTENSIONS.has(extension)) continue;
+    const id = file.slice(0, -extension.length);
+    if (!id) continue;
+    copyFileSync(resolve(OVERRIDE_DIR, file), resolve(OUT_DIR, file));
+    overrides.push(file);
+    written.add(id);
+  }
 }
 
 // Guard against an app referencing artwork that was never generated. The data
@@ -163,4 +215,7 @@ if (missing.length) {
 const unused = [...written].filter((id) => !referenced.has(id)).sort();
 console.log(`Wrote ${written.size} app icons to public/app-icons/`);
 console.log(`${referenced.size} referenced by the portal data.`);
+if (overrides.length) {
+  console.log(`${overrides.length} replaced from assets/app-icons/: ${overrides.join(", ")}`);
+}
 if (unused.length) console.log(`Unreferenced (harmless): ${unused.join(", ")}`);

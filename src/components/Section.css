@@ -29,3 +29,16 @@
   color: var(--neutral-medium-gray);
   font-size: var(--type-small-medium);
 }
+
+.section__action {
+  margin-left: auto;
+  color: var(--primary-blue);
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+}
+
+.section__action:hover,
+.section__action:focus {
+  color: var(--primary-blue-shade-2);
+  text-decoration: underline;
+}

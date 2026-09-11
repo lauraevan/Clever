@@ -78,19 +78,47 @@ await shot("teacher-page", { x: 0, y: 0, width: 1440, height: 800 });
 // --- Mock app launch ------------------------------------------------------
 await page.getByRole("button", { name: /Back to portal/ }).click();
 await page.waitForSelector(".dashboard");
-await page.locator(".resource-tile", { hasText: "Capti Voice" }).first().click();
-await page.waitForSelector(".app-view__title");
-await shot("app-view", { x: 0, y: 0, width: 1440, height: 700 });
+await page.locator(".resource-tile", { hasText: "Clever Goals" }).first().click();
+await page.waitForSelector(".resource-page__title");
+await shot("tile-opens-page", { x: 0, y: 0, width: 1440, height: 700 });
 
 // --- Unavailable app ------------------------------------------------------
 await page.goto(`${URL}#/app/canvas`, { waitUntil: "networkidle" });
 await page.waitForSelector(".app-view__notice--warning");
 await shot("app-unavailable", { x: 0, y: 0, width: 1440, height: 700 });
 
-// --- Demo landing ---------------------------------------------------------
+// --- Sign-in --------------------------------------------------------------
 await page.goto(`${URL}#/login`, { waitUntil: "networkidle" });
-await page.waitForSelector(".demo-login__button");
-await shot("demo-login", { x: 0, y: 0, width: 1440, height: 760 });
+await page.waitForSelector(".sign-in__provider");
+await shot("sign-in", { x: 0, y: 0, width: 1440, height: 760 });
+
+// --- Portal-hosted pages --------------------------------------------------
+for (const [pageId, name] of [
+  ["clever-badges", "page-badge"],
+  ["clever-goals", "page-goals"],
+  ["lunch-menu", "page-lunch-menu"],
+  ["bus-routes", "page-bus-routes"],
+  ["student-handbook", "page-handbook"],
+  ["library-catalog", "page-library-catalog"],
+  ["tech-helpdesk", "page-helpdesk"],
+  ["mangan-schedule", "page-schedule"],
+  ["mangan-spelling", "page-spelling"],
+]) {
+  await page.goto(`${URL}#/page/${pageId}`, { waitUntil: "networkidle" });
+  await page.waitForSelector(".resource-page__title");
+  await shot(name, { x: 0, y: 0, width: 1440, height: 900 });
+}
+
+// --- Clever Library, notifications, account -------------------------------
+for (const [hash, name] of [
+  ["#/library", "library"],
+  ["#/notifications", "notifications-page"],
+  ["#/account", "account"],
+]) {
+  await page.goto(`${URL}${hash}`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(300);
+  await shot(name, { x: 0, y: 0, width: 1440, height: 900 });
+}
 
 // --- Mobile nav -----------------------------------------------------------
 await page.goto(URL, { waitUntil: "networkidle" });

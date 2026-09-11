@@ -2,6 +2,7 @@ import { ResourceGrid } from "../components/ResourceGrid";
 import { ResourceTile } from "../components/ResourceTile";
 import { Section } from "../components/Section";
 import { LinkIcon, LongArrowLeftIcon } from "../lib/icons";
+import type { TileSize } from "../components/ResourceTile";
 import type { TeacherPage as TeacherPageData, TeacherPageResource } from "../data/types";
 import "./TeacherPage.css";
 
@@ -9,6 +10,7 @@ interface Props {
   page: TeacherPageData;
   onBack: () => void;
   onOpenResource: (resource: TeacherPageResource) => void;
+  tileSize: TileSize;
 }
 
 /**
@@ -16,7 +18,7 @@ interface Props {
  * a Back control, the teacher's identity, and the resource sections they
  * assembled.
  */
-export function TeacherPage({ page, onBack, onOpenResource }: Props) {
+export function TeacherPage({ page, onBack, onOpenResource, tileSize }: Props) {
   return (
     <main className="teacher-page" tabIndex={-1}>
       <button type="button" className="button-reset teacher-page__back" onClick={onBack}>
@@ -43,6 +45,7 @@ export function TeacherPage({ page, onBack, onOpenResource }: Props) {
                 title={resource.title}
                 icon={resource.icon}
                 notes={resource.notes}
+                size={tileSize}
                 target={resource.target}
                 onActivate={() => onOpenResource(resource)}
                 iconNode={

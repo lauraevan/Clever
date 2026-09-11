@@ -1,62 +1,92 @@
 import { useCallback, useState } from "react";
 import { CleverHeader } from "./components/CleverHeader";
 import { CleverSidebar } from "./components/CleverSidebar";
-import { Toast } from "./components/Toast";
+import { AccountSettings } from "./pages/AccountSettings";
 import { AppView } from "./pages/AppView";
 import { Dashboard } from "./pages/Dashboard";
-import { DemoLogin } from "./pages/DemoLogin";
+import { LibraryPage } from "./pages/LibraryPage";
+import { NotificationsPage } from "./pages/NotificationsPage";
+import { ResourcePage } from "./pages/ResourcePage";
+import { SignIn } from "./pages/SignIn";
 import { TeacherPage } from "./pages/TeacherPage";
 import { resourcesById } from "./data/apps";
+import { notifications as initialNotifications } from "./data/notifications";
+import { resourcePagesById } from "./data/resourcePages";
 import { teacherPagesById } from "./data/teacherPages";
 import { useFavorites } from "./lib/useFavorites";
-import { useRoute } from "./lib/router";
+import { useStoredValue } from "./lib/useStoredValue";
+import { useRoute, type Route } from "./lib/router";
 import type { SearchResult } from "./lib/search";
-import type { Resource, ResourceTarget, SectionId, TeacherPageResource } from "./data/types";
+import type { TileSize } from "./components/ResourceTile";
+import type { Resource, SectionId, TeacherPageResource } from "./data/types";
 import "./App.css";
+
+const TILE_SIZES: TileSize[] = ["small", "medium", "large"];
 
 export default function App() {
   const [route, rawNavigate] = useRoute();
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const { favorites, isFavorite, toggleFavorite } = useFavorites();
 
+  const [tileSize, setTileSize] = useStoredValue<TileSize>(
+    "clever.tile-size",
+    "large",
+    (value): value is TileSize => TILE_SIZES.includes(value as TileSize),
+  );
+
+  const [notifications, setNotifications] = useState(initialNotifications);
   const [selectedSection, setSelectedSection] = useState<SectionId | null>("teacher-pages");
   const [scrollTarget, setScrollTarget] = useState<SectionId | null>(null);
   const [navOpen, setNavOpen] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
 
-  // Every route change also dismisses the off-canvas nav.
+  /** Every route change also dismisses the off-canvas nav. */
   const navigate = useCallback(
-    (next: Parameters<typeof rawNavigate>[0]) => {
+    (next: Route) => {
       setNavOpen(false);
       rawNavigate(next);
     },
     [rawNavigate],
   );
 
-  const openTarget = useCallback(
-    (target: ResourceTarget, id: string) => {
-      if (target.kind === "external") {
-        window.open(target.href, "_blank", "noopener,noreferrer");
-        return;
-      }
-      navigate({ name: "app", resourceId: id });
-    },
-    [navigate],
-  );
+  const openExternal = (href: string) => window.open(href, "_blank", "noopener,noreferrer");
 
   const handleOpenResource = useCallback(
-    (resource: Resource) => openTarget(resource.target, resource.id),
-    [openTarget],
+    (resource: Resource) => {
+      if (resource.target.kind === "external") {
+        openExternal(resource.target.href);
+        return;
+      }
+      if (resource.target.kind === "page") {
+        navigate({ name: "page", pageId: resource.id });
+        return;
+      }
+      navigate({ name: "app", resourceId: resource.id });
+    },
+    [navigate],
   );
 
   const handleOpenTeacherPageResource = useCallback(
     (resource: TeacherPageResource) => {
       if (resource.target.kind === "external") {
-        window.open(resource.target.href, "_blank", "noopener,noreferrer");
+        openExternal(resource.target.href);
         return;
       }
-      setToast(`${resource.title} is a placeholder link on this demo Teacher Page.`);
+      navigate({ name: "page", pageId: resource.pageId ?? resource.id });
     },
-    [],
+    [navigate],
+  );
+
+  /** Follows an in-page link by its visible label, when one resolves. */
+  const handleOpenLabel = useCallback(
+    (label: string) => {
+      for (const [id, page] of resourcePagesById) {
+        if (page.title.toLowerCase() === label.toLowerCase()) {
+          navigate({ name: "page", pageId: id });
+          return;
+        }
+      }
+      navigate({ name: "dashboard" });
+    },
+    [navigate],
   );
 
   const handleSearchResult = useCallback(
@@ -66,14 +96,15 @@ export default function App() {
         return;
       }
       if (result.target.kind === "external") {
-        window.open(result.target.href, "_blank", "noopener,noreferrer");
+        openExternal(result.target.href);
         return;
       }
-      if (result.kind === "resource") {
-        navigate({ name: "app", resourceId: result.id.replace(/^resource:/, "") });
+      const resourceId = result.id.replace(/^(resource|link):/, "").split(":").pop();
+      if (result.target.kind === "unavailable" && resourceId) {
+        navigate({ name: "app", resourceId });
         return;
       }
-      setToast(`${result.title} is a placeholder link on this demo portal.`);
+      if (resourceId) navigate({ name: "page", pageId: resourceId });
     },
     [navigate],
   );
@@ -83,7 +114,7 @@ export default function App() {
       setSelectedSection(id);
       if (route.name !== "dashboard") {
         navigate({ name: "dashboard" });
-        // Let the dashboard mount before asking it to scroll.
+        // Let the portal mount before asking it to scroll.
         window.setTimeout(() => setScrollTarget(id), 0);
       } else {
         setScrollTarget(id);
@@ -93,19 +124,31 @@ export default function App() {
     [navigate, route.name],
   );
 
+  const markAllRead = () =>
+    setNotifications((current) => current.map((item) => ({ ...item, unread: false })));
+
+  const toggleRead = (id: string) =>
+    setNotifications((current) =>
+      current.map((item) => (item.id === id ? { ...item, unread: !item.unread } : item)),
+    );
+
   if (route.name === "login") {
-    return <DemoLogin onEnter={() => navigate({ name: "dashboard" })} />;
+    return <SignIn onSignIn={() => navigate({ name: "dashboard" })} />;
   }
+
+  const backToPortal = () => navigate({ name: "dashboard" });
 
   return (
     <div className="app">
       <CleverHeader
         navOpen={navOpen}
         onToggleNav={() => setNavOpen((open) => !open)}
-        onGoHome={() => navigate({ name: "dashboard" })}
+        onGoHome={backToPortal}
         onOpenResult={handleSearchResult}
-        onLogOut={() => navigate({ name: "login" })}
-        onOpenDemoNotice={(title) => setToast(`${title} isn't available in this UI demo.`)}
+        onNavigate={navigate}
+        notifications={notifications}
+        onMarkAllRead={markAllRead}
+        portalActive={route.name === "dashboard"}
       />
 
       <div className="app__body">
@@ -122,35 +165,72 @@ export default function App() {
             onToggleFavorite={toggleFavorite}
             onOpenResource={handleOpenResource}
             onOpenTeacherPage={(pageId) => navigate({ name: "teacher", pageId })}
+            onOpenLibrary={() => navigate({ name: "library" })}
             scrollTarget={scrollTarget}
             onScrolled={() => setScrollTarget(null)}
             onVisibleSectionChange={setSelectedSection}
+            tileSize={tileSize}
           />
         ) : null}
 
-        {route.name === "teacher" ? (
-          (() => {
-            const page = teacherPagesById.get(route.pageId);
-            if (!page) return <AppView resource={undefined} onBack={() => navigate({ name: "dashboard" })} />;
-            return (
-              <TeacherPage
-                page={page}
-                onBack={() => navigate({ name: "dashboard" })}
-                onOpenResource={handleOpenTeacherPageResource}
-              />
-            );
-          })()
+        {route.name === "teacher"
+          ? (() => {
+              const page = teacherPagesById.get(route.pageId);
+              if (!page) return <AppView resource={undefined} onBack={backToPortal} />;
+              return (
+                <TeacherPage
+                  page={page}
+                  onBack={backToPortal}
+                  onOpenResource={handleOpenTeacherPageResource}
+                  tileSize={tileSize}
+                />
+              );
+            })()
+          : null}
+
+        {route.name === "page"
+          ? (() => {
+              const page = resourcePagesById.get(route.pageId);
+              if (!page) return <AppView resource={undefined} onBack={backToPortal} />;
+              return (
+                <ResourcePage page={page} onBack={backToPortal} onOpenLink={handleOpenLabel} />
+              );
+            })()
+          : null}
+
+        {route.name === "library" ? (
+          <LibraryPage
+            onBack={backToPortal}
+            onOpenResource={handleOpenResource}
+            isFavorite={isFavorite}
+            onToggleFavorite={toggleFavorite}
+            tileSize={tileSize}
+          />
+        ) : null}
+
+        {route.name === "notifications" ? (
+          <NotificationsPage
+            notifications={notifications}
+            onBack={backToPortal}
+            onMarkAllRead={markAllRead}
+            onToggleRead={toggleRead}
+          />
+        ) : null}
+
+        {route.name === "account" ? (
+          <AccountSettings
+            onBack={backToPortal}
+            onNavigate={navigate}
+            tileSize={tileSize}
+            onTileSizeChange={setTileSize}
+            favoriteCount={favorites.length}
+          />
         ) : null}
 
         {route.name === "app" ? (
-          <AppView
-            resource={resourcesById.get(route.resourceId)}
-            onBack={() => navigate({ name: "dashboard" })}
-          />
+          <AppView resource={resourcesById.get(route.resourceId)} onBack={backToPortal} />
         ) : null}
       </div>
-
-      {toast ? <Toast message={toast} onDismiss={() => setToast(null)} /> : null}
     </div>
   );
 }

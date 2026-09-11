@@ -1,22 +1,22 @@
-import { useState } from "react";
 import { Menu } from "./Menu";
 import { TopBarButton } from "./TopBarButton";
 import { BellIcon, CheckIcon } from "../lib/icons";
-import { notifications as initialNotifications } from "../data/notifications";
+import type { PortalNotification } from "../data/types";
 import "./NotificationsMenu.css";
+
+interface Props {
+  notifications: PortalNotification[];
+  onMarkAllRead: () => void;
+  onViewAll: () => void;
+}
 
 /**
  * The bell in the blue bar plus its dropdown. The dropdown reuses Clever's
  * Menu chrome and is sized to the bar rather than to a full-width modal.
  */
-export function NotificationsMenu() {
-  const [notifications, setNotifications] = useState(initialNotifications);
+export function NotificationsMenu({ notifications, onMarkAllRead, onViewAll }: Props) {
   const unreadCount = notifications.filter((notification) => notification.unread).length;
-
-  const markAllRead = () =>
-    setNotifications((current) =>
-      current.map((notification) => ({ ...notification, unread: false })),
-    );
+  const recent = notifications.slice(0, 4);
 
   return (
     <Menu
@@ -42,12 +42,12 @@ export function NotificationsMenu() {
         </TopBarButton>
       )}
     >
-      {() => (
+      {({ close }) => (
         <>
           <div className="notifications__header">
             <h2 className="notifications__title">Notifications</h2>
             {unreadCount > 0 ? (
-              <button type="button" className="button-reset notifications__mark" onClick={markAllRead}>
+              <button type="button" className="button-reset notifications__mark" onClick={onMarkAllRead}>
                 Mark all as read
               </button>
             ) : null}
@@ -57,7 +57,7 @@ export function NotificationsMenu() {
             <p className="notifications__empty">You have no notifications right now.</p>
           ) : (
             <ul className="list-reset notifications__list">
-              {notifications.map((notification) => (
+              {recent.map((notification) => (
                 <li key={notification.id}>
                   <div
                     className={[
@@ -81,11 +81,25 @@ export function NotificationsMenu() {
             </ul>
           )}
 
-          {unreadCount === 0 && notifications.length > 0 ? (
-            <p className="notifications__caught-up">
-              <CheckIcon size="0.75rem" /> You&rsquo;re all caught up
-            </p>
-          ) : null}
+          <div className="notifications__footer">
+            {unreadCount === 0 && notifications.length > 0 ? (
+              <span className="notifications__caught-up">
+                <CheckIcon size="0.75rem" /> You&rsquo;re all caught up
+              </span>
+            ) : (
+              <span />
+            )}
+            <button
+              type="button"
+              className="button-reset notifications__view-all"
+              onClick={() => {
+                close();
+                onViewAll();
+              }}
+            >
+              See all notifications
+            </button>
+          </div>
         </>
       )}
     </Menu>

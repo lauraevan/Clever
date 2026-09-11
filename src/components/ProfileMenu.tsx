@@ -1,12 +1,12 @@
 import { Menu } from "./Menu";
 import { TopBarButton } from "./TopBarButton";
-import { ChevronDownIcon, CleverBadgeIcon, KeyIcon, SignOutIcon, UserIcon } from "../lib/icons";
+import { BellIcon, ChevronDownIcon, CleverBadgeIcon, GridIcon, SignOutIcon, UserIcon } from "../lib/icons";
 import { student } from "../data/student";
+import type { Route } from "../lib/router";
 import "./ProfileMenu.css";
 
 interface Props {
-  onLogOut: () => void;
-  onOpenDemoNotice: (title: string) => void;
+  onNavigate: (route: Route) => void;
 }
 
 /**
@@ -14,7 +14,7 @@ interface Props {
  * TopBarButton rather than as a separate pill, matching Clever's TopBar
  * composition.
  */
-export function ProfileMenu({ onLogOut, onOpenDemoNotice }: Props) {
+export function ProfileMenu({ onNavigate }: Props) {
   return (
     <Menu
       label={`Account menu for ${student.fullName}`}
@@ -62,7 +62,7 @@ export function ProfileMenu({ onLogOut, onOpenDemoNotice }: Props) {
                 className="button-reset menu__item"
                 onClick={() => {
                   close();
-                  onOpenDemoNotice("Account settings");
+                  onNavigate({ name: "account" });
                 }}
               >
                 <span className="menu__item-inner">
@@ -77,12 +77,12 @@ export function ProfileMenu({ onLogOut, onOpenDemoNotice }: Props) {
                 className="button-reset menu__item"
                 onClick={() => {
                   close();
-                  onOpenDemoNotice("Change password");
+                  onNavigate({ name: "page", pageId: "clever-badges" });
                 }}
               >
                 <span className="menu__item-inner">
-                  <KeyIcon size="1rem" className="menu__item-icon" />
-                  Change password
+                  <CleverBadgeIcon size="1rem" className="menu__item-icon" />
+                  My Clever Badge
                 </span>
               </button>
             </li>
@@ -92,12 +92,27 @@ export function ProfileMenu({ onLogOut, onOpenDemoNotice }: Props) {
                 className="button-reset menu__item"
                 onClick={() => {
                   close();
-                  onOpenDemoNotice("Clever Badge");
+                  onNavigate({ name: "page", pageId: "clever-goals" });
                 }}
               >
                 <span className="menu__item-inner">
-                  <CleverBadgeIcon size="1rem" className="menu__item-icon" />
-                  My Clever Badge
+                  <GridIcon size="1rem" className="menu__item-icon" />
+                  My goals
+                </span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                className="button-reset menu__item"
+                onClick={() => {
+                  close();
+                  onNavigate({ name: "notifications" });
+                }}
+              >
+                <span className="menu__item-inner">
+                  <BellIcon size="1rem" className="menu__item-icon" />
+                  Notifications
                 </span>
               </button>
             </li>
@@ -110,7 +125,7 @@ export function ProfileMenu({ onLogOut, onOpenDemoNotice }: Props) {
             className="button-reset menu__item"
             onClick={() => {
               close();
-              onLogOut();
+              onNavigate({ name: "login" });
             }}
           >
             <span className="menu__item-inner">

@@ -1,12 +1,13 @@
-# Clever Student Portal — UI replica
+# Clever Student Portal — UI recreation
 
-A local, demo-only recreation of the Clever student portal interface, built with
-Vite + React + TypeScript.
+A working recreation of the Clever student portal, built with Vite + React +
+TypeScript. Every page is built out, every control does something, and
+application tiles open the real product they name.
 
-> This is a UI reproduction for demonstration purposes. It is **not** affiliated
-> with, endorsed by, or connected to Clever Inc. It talks to no Clever service,
-> has no account behind it, and never asks for, stores, or transmits credentials.
-> All student, school, and district data in it is fictional.
+> Interface recreation, not affiliated with or endorsed by Clever Inc. It talks
+> to no Clever service and has no account behind it. There is no username or
+> password field anywhere in the project, and nothing is collected, stored, or
+> transmitted. The student, school, and district are sample data.
 
 ```bash
 npm install
@@ -17,11 +18,11 @@ npm run dev          # http://localhost:5173
 
 ## What the reproduction was measured against
 
-No reference screenshots were supplied with this task, and this environment's
-network policy blocks `clever.com` and every Clever asset host, so the portal
-could not be captured or inspected directly.
+No reference screenshots were supplied, and this environment's network policy
+blocks `clever.com` and every Clever asset host, so the portal could not be
+captured or inspected directly.
 
-Rather than estimate the design, the replica is built against Clever's own
+Rather than estimate the design, the interface is built against Clever's own
 published source of truth: **[`clever-components`](https://www.npmjs.com/package/clever-components)**
 (`github.com/Clever/components`), the React component library Clever publishes to
 npm and maintains under `@clever.com` accounts. It contains the portal's actual
@@ -51,6 +52,8 @@ originating file noted inline. The values that shape the layout:
 | Icon rounding | `border-radius: 10%` | `src/ResourceTile/ResourceTile.less` |
 | Tile hover | `0 3px 3px 1px rgba(71, 76, 94, 0.2)`, 200ms linear | `src/less/animations.less` |
 | Menu dropdown | 1px `#e3e6eb`, 3px radius, `0 2px 4px rgba(21, 19, 28, 0.1)` | `src/Menu/Menu.less` |
+| Field chrome | 1px `#e3e6eb`, 4px radius, 8px padding-x | `src/TextInput2/TextInput2.less` |
+| Focus ring | `0 0 0 4px #809dff80` plus a 1px blue border | `src/TextInput2/TextInput2.less` |
 
 The sidebar width is not a round number in the original — it is summed from parts:
 `16 (padding) + 24 (icon) + 12 (gap) + 140 (label) + 8 + 16 + 8 (arrow) + 1 (border) = 225px`.
@@ -68,12 +71,10 @@ font-family: "Proxima Nova", "Helvetica Neue", Arial, Helvetica, sans-serif;
 ```
 
 Proxima Nova is licensed and self-hosted by Clever at `assets.clever.com/fonts/`,
-so it cannot be redistributed here. The replica keeps Clever's stack and inserts
-one locally bundled fallback after it — **Figtree**, a humanist geometric sans with
-a comparable x-height and width — so it renders close to the real portal on machines
+so it cannot be redistributed here. The stack above is kept as-is with one locally
+bundled fallback inserted after it — **Figtree**, a humanist geometric sans with a
+comparable x-height and width — so it renders close to the real portal on machines
 without Proxima Nova while still preferring the genuine face where it is installed.
-This is the one substitution in the project that is a judgement call rather than a
-transcription.
 
 ## Iconography
 
@@ -85,46 +86,88 @@ No second icon set is mixed in and no emoji are used.
 
 ## Application artwork
 
-`npm run generate:app-icons` writes 112 square icons into `public/app-icons/`:
+`npm run generate:app-icons` writes 116 square icons into `public/app-icons/` from
+three sources, in descending order of fidelity:
 
-- Products carried by [`simple-icons`](https://simpleicons.org) — Google Classroom,
-  Drive, Docs, Slides, Sheets, Forms, Meet, Gmail, Earth, Khan Academy, Quizlet,
-  Scratch, Kahoot!, Duolingo, Padlet, Screencastify, Zoom, Wikipedia, YouTube,
-  Instructure — use the **official brand mark and official brand hex** from that
-  package.
-- Clever Badges and Clever Goals use the "C" from Clever's own logo outline.
-- Everything else is drawn as a wordmark or monogram on a brand-coloured ground,
-  auto-fitted to the tile. That is the form most real ed-tech app icons actually
-  take: IXL's icon is literally "IXL" reversed out of green.
+1. **Real full-colour vendor logos** from [`@iconify-json/logos`](https://www.npmjs.com/package/@iconify-json/logos)
+   (the SVG Logos collection): Google Drive, Gmail, Google Meet, Google Calendar,
+   Google Keep, Khan Academy, YouTube, Zoom, Microsoft Teams, OneDrive.
+2. **Official single-colour marks and brand hexes** from
+   [`simple-icons`](https://simpleicons.org): Google Classroom, Docs, Slides,
+   Sheets, Forms, Earth, Quizlet, Instructure, Scratch, Kahoot!, Duolingo, Padlet,
+   Screencastify, Wikipedia. Clever Badges and Clever Goals use the "C" from
+   Clever's own logo outline.
+3. **Wordmark and monogram tiles** for everything else, auto-fitted to the tile.
+   That is the form most real ed-tech app icons take — IXL's icon is literally
+   "IXL" reversed out of green.
 
-`simple-icons` carries almost no K-12 education products and this environment
-cannot reach vendor asset hosts, so the grounds for the wordmark tiles are close
-approximations of each product's brand colour rather than sampled values. They all
-live in one table in `scripts/appIconSpecs.mjs` and are easy to correct against a
-real portal.
+### These are not the real logos for most apps
 
-Artwork is full-bleed square with no rounding baked in, because Clever rounds icons
-in CSS at `border-radius: 10%`.
+Group 3 covers about eighty products — IXL, Capti Voice, Lexia Core5, i-Ready,
+Zearn, Newsela, Seesaw, Nearpod, BrainPOP and the rest. **Their real logos are not
+in this repository**, for two reasons that are worth stating plainly:
+
+- No npm package carries K-12 education brand logos. `simple-icons` and SVG Logos
+  are both developer-tool oriented; searching both for education brands returns
+  almost nothing.
+- This environment's egress policy blocks every vendor asset host, so the files
+  cannot be fetched.
+
+The wordmark tiles are a deliberate stand-in, not an attempt to pass as the real
+mark, and the brand colours behind them are close approximations rather than
+sampled values. They all live in one table in `scripts/appIconSpecs.mjs`.
+
+**To use the real logos**, drop them into `assets/app-icons/` as `<app-id>.svg` or
+`<app-id>.png` and run `npm run generate:app-icons`. Any file there replaces the
+generated artwork for that id and nothing else changes. The id is the file name the
+tile already asks for: `/app-icons/ixl.svg` means `assets/app-icons/ixl.svg`.
+See `assets/app-icons/README.md`.
+
+## Pages
+
+| Route | Page |
+| --- | --- |
+| `#/` | The portal: Teacher Pages, Favorites, Classroom, School and District Resources, Clever Library |
+| `#/teacher/:id` | A Teacher Page — Ms. Mangan's class, the library, music, PE, technology |
+| `#/library` | Clever Library, searchable and filtered by subject |
+| `#/notifications` | Every notification, grouped unread and earlier |
+| `#/account` | Account settings: identity, how you log in, icon size, saved data |
+| `#/page/:id` | A page the school or district hosts (21 of them, below) |
+| `#/app/:id` | An app the district has not finished setting up |
+| `#/login` | The district sign-in screen |
+
+Application tiles open the product's real site, the way single sign-on would land
+you there. Tiles for things a school hosts itself open a page inside the portal,
+because that is where they live in a real deployment too:
+
+- **Clever's own** — Clever Badge (with a badge card), Clever Goals (weekly
+  targets with progress)
+- **District** — Student Handbook, District Calendar, Bus Routes, Counseling
+  Center, Technology Help Desk (with a working ticket form), Family Portal,
+  Acceptable Use Policy
+- **School** — Lunch Menu, Library Catalog, Yearbook
+- **Teacher-written** — Daily Schedule, Spelling List, Classroom Jobs, Birthday
+  Calendar, How to Cite a Source, Recorder Fingering Chart, Spring Concert Songs,
+  Fitness Log, Chromebook Care
+
+Each carries real content — schedules, menus, route tables, borrowing rules,
+fingering charts — rather than placeholder text.
 
 ## Sample data
-
-The portal is populated as a 5th grader's:
 
 - **Student** — Evan, 5th Grade
 - **Homeroom** — Ms. Mangan, Room 12, whose Teacher Page carries the day-to-day
   work (Morning Work, Reading Block, Math Block, a science unit, class links)
 - **Specials** — Library Media Center, Music, PE and Health, Technology Resources
-- **112 applications** across Classroom Resources, School Resources, District
-  Resources and the Clever Library, including IXL, Capti Voice, Lexia Core5,
-  i-Ready, Zearn, Raz-Kids, Epic!, Newsela, Mystery Science, Prodigy, ST Math,
-  XtraMath, Seesaw, Nearpod, Pear Deck, PebbleGo, Sora, Destiny Discover,
-  BrainPOP, Generation Genius, GoNoodle, Second Step, QuaverMusic, Star 360,
-  MAP Growth, PowerSchool, Read&Write, Snap&Read, Bookshare, Learning Ally and
-  the wider Clever Library catalog
+- **116 applications** including IXL, Capti Voice, Lexia Core5, i-Ready, Zearn,
+  Raz-Kids, Epic!, Newsela, Mystery Science, Prodigy, ST Math, XtraMath, Seesaw,
+  Nearpod, Pear Deck, PebbleGo, Sora, Destiny Discover, BrainPOP, Generation
+  Genius, GoNoodle, Second Step, QuaverMusic, Star 360, MAP Growth, PowerSchool,
+  Read&Write, Snap&Read, Bookshare, Learning Ally and the Clever Library catalog
 
 School and district names are placeholders — `Lincoln Elementary School` and
-`Lincoln Unified School District`. Both, along with the student's name and grade,
-are in `src/data/student.ts` and can be changed in one place.
+`Lincoln Unified School District`. Both, with the student's name, grade and
+homeroom, are in `src/data/student.ts` and can be changed in one place.
 
 ## Structure
 
@@ -132,16 +175,26 @@ are in `src/data/student.ts` and can be changed in one place.
 src/
   components/   CleverHeader, CleverSidebar, NavItem, TopBarButton, SearchControl,
                 NotificationsMenu, ProfileMenu, Menu, Section, ResourceGrid,
-                ResourceTile, TeacherPageTile, CleverLogo, Toast
-  pages/        Dashboard, TeacherPage, AppView, DemoLogin
-  data/         apps.ts, teacherPages.ts, navigation.ts, notifications.ts,
-                student.ts, types.ts
-  lib/          icons.tsx (generated), router.ts, search.ts, useFavorites.ts
+                ResourceTile, TeacherPageTile, CleverLogo, CleverBadgeCard,
+                GoalsList, TicketForm
+  pages/        Dashboard, TeacherPage, ResourcePage, LibraryPage,
+                NotificationsPage, AccountSettings, AppView, SignIn
+  data/         apps.ts, teacherPages.ts, resourcePages.ts,
+                teacherResourcePages.ts, navigation.ts, notifications.ts,
+                goals.ts, student.ts, types.ts
+  lib/          icons.tsx (generated), router.ts, search.ts, useFavorites.ts,
+                useStoredValue.ts
   styles/       tokens.css, base.css
 scripts/        generators and the verification scripts
+assets/         drop-in overrides for real vendor logos
 ```
 
-Routing is four hash routes handled in `src/lib/router.ts` rather than a routing
+Portal-hosted pages are written as structured content blocks (`lead`, `heading`,
+`table`, `definitions`, `links`, `callout`, `badge`, `goals`, `ticket-form`) in
+`src/data/types.ts` and rendered by one `ResourcePage` component, so adding a page
+is a data change.
+
+Routing is eight hash routes handled in `src/lib/router.ts` rather than a routing
 dependency.
 
 ## Behaviour
@@ -150,20 +203,19 @@ dependency.
   results list beneath it, covering applications, links, Teacher Pages, and the
   resources inside them. Typing filters, arrow keys move, Enter opens, Escape
   closes. It is deliberately not a command palette and carries no ⌘K affordance.
-- **Notifications** and the **profile menu** open Clever-chrome dropdowns; both
-  close on Escape or an outside click.
+- **Notifications** open a dropdown with the four most recent and a link to the
+  full page, where they can be marked read individually or all at once.
+- **The profile menu** reaches account settings, the Clever Badge, goals,
+  notifications, and log out.
 - **Favorites** toggle from a small outline heart on each tile, move the app into
   the Favorites section, and persist to `localStorage`.
-- **Left nav** covers Teacher Pages, Favorites, Classroom Resources, School
-  Resources, District Resources and the Clever Library; it scrolls to a section and
-  tracks the one on screen as you scroll, including at the very bottom of the page
-  where the last section can no longer reach the top.
-- **Teacher Pages** open onto their own page, keeping the bar and nav, with a Back
-  control and the teacher's own resource sections.
-- **Tiles** open external sites in a new tab, internal apps onto a local screen,
-  and unavailable apps onto Clever's not-set-up state.
-- **Log out** returns to a local demo landing screen with a single
-  "Continue to demo" control and no credential fields anywhere.
+- **Icon size** is a real setting: choosing small, medium or large in account
+  settings redraws every tile at Clever's 80, 104 or 128px, and persists.
+- **Left nav** covers all six sections; it scrolls to a section and tracks the one
+  on screen, including at the bottom of the page where the last section can no
+  longer reach the top.
+- **The help desk ticket form** validates, submits, and returns a reference.
+- **Sign-in** is a set of single-sign-on choices, as Clever's real login page is.
 
 Hover is a single soft shadow fading in over 200ms — the same `::after` technique
 Clever uses, because `box-shadow` animates poorly. Nothing scales, bounces, or glows.
@@ -175,38 +227,44 @@ npm run dev      # in one shell
 npm run check    # typecheck, lint, geometry, accessibility, nav tracking
 ```
 
-- `check:geometry` also screenshots 1440×900, 1920×1080, 1536×864, 1366×768,
-  1024×768, 820×1180 and 414×896, and fails on any horizontal overflow.
-- `check:a11y` covers landmarks, headings, decorative artwork, toggle state,
-  keyboard operation of search and menus, Escape handling, a visible focus ring,
-  and that the demo landing screen collects no credentials.
-- `node scripts/interactions.mjs` captures the dropdowns, hover, Teacher Page,
-  favourites and mobile nav for visual review.
+- `check:geometry` asserts 18 measurements against the DOM, and screenshots
+  1440×900, 1920×1080, 1536×864, 1366×768, 1024×768, 820×1180 and 414×896, failing
+  on any horizontal overflow.
+- `check:a11y` runs 24 checks: landmarks, headings, decorative artwork, toggle
+  state, keyboard operation of search and menus, Escape handling, a visible focus
+  ring, that sign-in has no input fields at all, that five portal pages render,
+  that the ticket form returns a reference, that the library filters, that marking
+  all notifications read works, and that the icon-size setting reaches the portal.
+- `node scripts/interactions.mjs` captures every page and dropdown for review.
 
 Screenshots land in `screenshots/` (gitignored); set `SHOT_DIR` to redirect them
 and `CHROMIUM_PATH` to point Playwright at an existing browser.
 
 ## Deviations from the original, and why
 
-Three, all deliberate:
-
-1. **Font** — Proxima Nova is licensed and cannot be shipped; Figtree stands in
-   behind it (above).
-2. **Focus rings** — Clever's `.button--reset` clears the outline on `:focus`
+1. **Most app logos are stand-ins.** Explained above — no package carries them and
+   vendor hosts are unreachable from here. `assets/app-icons/` takes real files.
+2. **Font** — Proxima Nova is licensed and cannot be shipped; Figtree stands in
+   behind it.
+3. **Focus rings** — Clever's `.button--reset` clears the outline on `:focus`
    outright, which predates `:focus-visible` and leaves keyboard users with no
    indicator. The clearing is scoped to `:focus:not(:focus-visible)` so pointer
    interaction looks the same while keyboard focus stays visible. Clever's reset
    also transitions `all`, which would animate the ring in; outline is excluded
    from that transition so the ring appears immediately.
-3. **Page composition and content** — the component library supplies the parts and
+4. **No authentication.** The sign-in screen reproduces the shape of Clever's real
+   login page — single-sign-on choices rather than a password box — and stops
+   there. It has no fields, no provider integration, and no account behind it.
+5. **Page composition and content** — the component library supplies the parts and
    their exact measurements but not the portal's page assembly, and no reference
-   screenshot was available. Which sections appear and in what order, the app
-   catalog, and the school and district names are all sample content. Every visual
-   value used to build them is still Clever's own.
+   screenshot was available. Which sections appear, the app catalog, the page set,
+   and the school and district names are all sample content. Every visual value
+   used to build them is Clever's own.
 
 ## Licences
 
 Font Awesome 4.7.0 icons are SIL OFL 1.1 / CC BY 4.0. Brand marks from
-`simple-icons` remain the property of their respective owners and are used here to
-represent those products. The Clever wordmark is the property of Clever Inc. and
-appears only to reproduce the interface being studied.
+`simple-icons` and the SVG Logos collection remain the property of their
+respective owners and are used here to represent those products. The Clever
+wordmark is the property of Clever Inc. and appears only to reproduce the
+interface being studied.

@@ -16,7 +16,8 @@
 /**
  * @typedef {object} IconSpec
  * @property {string} id                 file name, without extension
- * @property {string} [slug]             simple-icons slug, for real brand marks
+ * @property {string} [logo]             @iconify-json/logos name, real full-colour art
+ * @property {string} [slug]             simple-icons slug, for official single-colour marks
  * @property {"clever"} [style]          special-cased artwork
  * @property {string[]} [lines]          wordmark text, one entry per line
  * @property {string} [label]            accessible label, if not the lines
@@ -31,18 +32,22 @@
 /** @type {IconSpec[]} */
 export const iconSpecs = [
   // ===================================================================
-  // Official brand marks from simple-icons
+  // Real brand artwork
+  //
+  // `logo:` entries are the actual multi-colour vendor logo from the SVG Logos
+  // collection. `slug:` entries are the official single-colour mark and brand
+  // hex from simple-icons.
   // ===================================================================
   { id: "google-classroom", slug: "googleclassroom", bg: "brand", fg: "#ffffff", scale: 0.56 },
-  { id: "google-drive", slug: "googledrive", bg: "#ffffff", fg: "brand", scale: 0.72 },
+  { id: "google-drive", logo: "google-drive-2020", label: "Google Drive", scale: 0.66 },
   { id: "google-docs", slug: "googledocs", bg: "#ffffff", fg: "brand", scale: 0.72 },
   { id: "google-slides", slug: "googleslides", bg: "#ffffff", fg: "brand", scale: 0.72 },
   { id: "google-sheets", slug: "googlesheets", bg: "#ffffff", fg: "brand", scale: 0.72 },
   { id: "google-forms", slug: "googleforms", bg: "#ffffff", fg: "brand", scale: 0.72 },
-  { id: "gmail", slug: "gmail", bg: "#ffffff", fg: "brand", scale: 0.68 },
-  { id: "google-meet", slug: "googlemeet", bg: "#ffffff", fg: "brand", scale: 0.68 },
+  { id: "gmail", logo: "google-gmail-2020", label: "Gmail", scale: 0.62 },
+  { id: "google-meet", logo: "google-meet-2020", label: "Google Meet", scale: 0.64 },
   { id: "google-earth", slug: "googleearth", bg: "brand", fg: "#ffffff", scale: 0.56 },
-  { id: "khan-academy", slug: "khanacademy", bg: "brand", fg: "#ffffff", scale: 0.58 },
+  { id: "khan-academy", logo: "khan-academy-icon", label: "Khan Academy", scale: 0.7 },
   { id: "quizlet", slug: "quizlet", bg: "brand", fg: "#ffffff", scale: 0.56 },
   { id: "canvas", slug: "instructure", bg: "brand", fg: "#ffffff", scale: 0.58 },
   { id: "scratch", slug: "scratch", bg: "brand", fg: "#ffffff", scale: 0.58 },
@@ -50,9 +55,13 @@ export const iconSpecs = [
   { id: "duolingo", slug: "duolingo", bg: "brand", fg: "#ffffff", scale: 0.6 },
   { id: "padlet", slug: "padlet", bg: "brand", fg: "#ffffff", scale: 0.56 },
   { id: "wikipedia", slug: "wikipedia", bg: "#ffffff", fg: "brand", scale: 0.72 },
-  { id: "youtube", slug: "youtube", bg: "#ffffff", fg: "brand", scale: 0.72 },
-  { id: "zoom", slug: "zoom", bg: "brand", fg: "#ffffff", scale: 0.58 },
+  { id: "youtube", logo: "youtube-icon", label: "YouTube", scale: 0.66 },
+  { id: "zoom", logo: "zoom-icon", label: "Zoom", scale: 0.68 },
   { id: "screencastify", slug: "screencastify", bg: "brand", fg: "#ffffff", scale: 0.58 },
+  { id: "microsoft-teams", logo: "microsoft-teams", label: "Microsoft Teams", scale: 0.66 },
+  { id: "onedrive", logo: "microsoft-onedrive", label: "OneDrive", scale: 0.7 },
+  { id: "google-calendar", logo: "google-calendar-2020", label: "Google Calendar", scale: 0.64 },
+  { id: "google-keep", logo: "google-keep-2020", label: "Google Keep", scale: 0.62 },
 
   // ===================================================================
   // Clever's own products

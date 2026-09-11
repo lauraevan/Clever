@@ -1,0 +1,143 @@
+.sign-in {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: var(--size-l) var(--size-m);
+  background-color: var(--neutral-off-white);
+}
+
+.sign-in__card {
+  width: 100%;
+  max-width: 26rem;
+  padding: var(--size-xl);
+  border: var(--border-width-s) solid var(--neutral-silver);
+  border-radius: var(--radius-l);
+  background-color: var(--neutral-white);
+  box-shadow: var(--shadow-light);
+  text-align: center;
+}
+
+.sign-in__logo {
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.sign-in__district {
+  margin: var(--size-l) 0 0;
+  color: var(--neutral-black);
+  font-size: var(--type-medium-large);
+  font-weight: 600;
+}
+
+.sign-in__hint {
+  margin: var(--size-4xs) 0 0;
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small-medium);
+}
+
+.sign-in__providers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-xs);
+  margin-top: var(--size-l);
+}
+
+/* Clever's secondary Button: white ground, blue border and label. */
+.sign-in__provider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--size-xs);
+  width: 100%;
+  padding: var(--size-s) var(--size-m);
+  border: var(--border-width-s) solid var(--primary-blue);
+  border-radius: var(--radius-l);
+  background-color: var(--neutral-white);
+  color: var(--primary-blue);
+  font-family: inherit;
+  font-size: var(--type-medium);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--timing-promptly) ease-out;
+}
+
+.sign-in__provider:hover {
+  background-color: rgb(67 108 242 / 6%);
+  border-color: var(--primary-blue-shade-1);
+  color: var(--primary-blue-shade-1);
+}
+
+.sign-in__provider--primary {
+  border-color: var(--primary-blue);
+  background-color: var(--primary-blue);
+  color: var(--neutral-white);
+}
+
+.sign-in__provider--primary:hover {
+  border-color: var(--primary-blue-shade-1);
+  background-color: var(--primary-blue-shade-1);
+  color: var(--neutral-white);
+}
+
+.sign-in__provider-mark {
+  flex-shrink: 0;
+  width: var(--size-l);
+  height: var(--size-l);
+  border-radius: var(--radius-10percent);
+}
+
+.sign-in__provider-mark--badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-s);
+  background-color: rgb(255 255 255 / 20%);
+}
+
+.sign-in__provider-mark--district {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-s);
+  background-color: var(--neutral-off-white);
+  color: var(--neutral-medium-gray);
+}
+
+.sign-in__student-link {
+  margin: var(--size-m) 0 0;
+}
+
+.sign-in__link {
+  color: var(--primary-blue);
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+}
+
+.sign-in__link:hover,
+.sign-in__link:focus {
+  color: var(--primary-blue-shade-2);
+  text-decoration: underline;
+}
+
+.sign-in__help {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--size-2xs);
+  margin: var(--size-l) 0 0;
+  padding-top: var(--size-m);
+  border-top: var(--border-width-s) solid var(--neutral-silver);
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small);
+}
+
+.sign-in__notice {
+  max-width: 26rem;
+  margin: var(--size-m) 0 0;
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small);
+  line-height: 1.5;
+  text-align: center;
+}

@@ -1,4 +1,4 @@
-import { ExternalLinkIcon, LongArrowLeftIcon, WarningIcon } from "../lib/icons";
+import { LongArrowLeftIcon, WarningIcon } from "../lib/icons";
 import type { Resource } from "../data/types";
 import "./AppView.css";
 
@@ -8,9 +8,8 @@ interface Props {
 }
 
 /**
- * Where an in-portal application lands. Clicking a tile in the real portal
- * hands the student off to the application through single sign-on; this replica
- * stops at a local screen instead, because it has no account to hand off.
+ * Shown when a tile cannot be opened: an app the district has not finished
+ * setting up, or a link that does not match anything in the portal.
  */
 export function AppView({ resource, onBack }: Props) {
   const unavailable = resource?.target.kind === "unavailable";
@@ -34,23 +33,15 @@ export function AppView({ resource, onBack }: Props) {
           <img className="app-view__icon" src={resource.icon} alt="" role="presentation" />
           <h1 className="app-view__title">{resource.title}</h1>
 
-          {unavailable ? (
-            <p className="app-view__notice app-view__notice--warning">
-              <WarningIcon size="0.875rem" />
-              {resource.target.kind === "unavailable" ? resource.target.reason : null}
-            </p>
-          ) : (
-            <>
-              <p className="app-view__body">
-                In the real portal, selecting {resource.title} signs you straight in through Clever
-                single sign-on.
-              </p>
-              <p className="app-view__notice">
-                <ExternalLinkIcon size="0.875rem" />
-                This is a local demo, so there is no account to sign in to.
-              </p>
-            </>
-          )}
+          <p className="app-view__body">
+            {unavailable && resource.target.kind === "unavailable"
+              ? resource.target.reason
+              : "This app is in your portal but could not be opened."}
+          </p>
+          <p className="app-view__notice app-view__notice--warning">
+            <WarningIcon size="0.875rem" />
+            Ask your teacher to check with the technology office, or open a help desk ticket.
+          </p>
         </div>
       )}
     </main>

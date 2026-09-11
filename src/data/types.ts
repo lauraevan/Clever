@@ -14,12 +14,40 @@ export type ResourceSectionId = Exclude<SectionId, "favorites" | "teacher-pages"
 
 /** How a resource behaves when a student clicks it. */
 export type ResourceTarget =
-  /** Opens a mock single-sign-on screen inside the replica. */
-  | { kind: "demo" }
-  /** Opens a real public site in a new tab. */
+  /** Opens a page inside the portal, for things a school hosts itself. */
+  | { kind: "page" }
+  /** Opens the product's real site in a new tab. */
   | { kind: "external"; href: string }
   /** Shows Clever's "not available" treatment. */
   | { kind: "unavailable"; reason: string };
+
+/** A block of content on a portal-hosted page. */
+export type PageBlock =
+  | { kind: "lead"; text: string }
+  | { kind: "heading"; text: string }
+  | { kind: "paragraph"; text: string }
+  | { kind: "list"; items: string[] }
+  | { kind: "ordered"; items: string[] }
+  | { kind: "table"; head: string[]; rows: string[][] }
+  | { kind: "links"; items: Array<{ label: string; href?: string; note?: string }> }
+  | { kind: "callout"; tone: "info" | "warning"; text: string }
+  | { kind: "definitions"; items: Array<{ term: string; description: string }> }
+  /** The student's Clever Badge card. */
+  | { kind: "badge" }
+  /** Progress against the goals a teacher set. */
+  | { kind: "goals" }
+  /** The help desk's ticket form. */
+  | { kind: "ticket-form" };
+
+export interface ResourcePageContent {
+  /** Matches the resource id whose tile opens this page. */
+  id: string;
+  title: string;
+  subtitle?: string;
+  /** Breadcrumb-style label for where the page sits. */
+  owner: string;
+  blocks: PageBlock[];
+}
 
 export interface Resource {
   id: string;
@@ -37,6 +65,11 @@ export interface Resource {
 export interface TeacherPageResource {
   id: string;
   title: string;
+  /**
+   * Portal page this link opens, when it is not the one named by `id`. Lets a
+   * teacher link point at a page the district already publishes.
+   */
+  pageId?: string;
   /** Either a bundled app icon or a plain link rendered with a link glyph. */
   icon?: string;
   target: ResourceTarget;

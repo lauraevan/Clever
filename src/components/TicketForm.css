@@ -1,0 +1,112 @@
+.ticket-form {
+  max-width: 32rem;
+  margin: var(--size-m) 0 0;
+  padding: var(--size-m);
+  border: var(--border-width-s) solid var(--neutral-silver);
+  border-radius: var(--radius-l);
+  background-color: var(--neutral-off-white);
+}
+
+.ticket-form__field + .ticket-form__field {
+  margin-top: var(--size-s);
+}
+
+.ticket-form__label {
+  display: block;
+  margin-bottom: var(--size-2xs);
+  color: var(--neutral-dark-gray);
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+}
+
+/* Field chrome matches Clever's TextInput2. */
+.ticket-form__select,
+.ticket-form__textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--size-xs);
+  border: var(--border-width-s) solid var(--neutral-silver);
+  border-radius: var(--radius-l);
+  background-color: var(--neutral-white);
+  color: var(--neutral-black);
+  font-family: inherit;
+  font-size: var(--type-small-medium);
+  transition: all var(--timing-quickly) ease-out;
+}
+
+.ticket-form__textarea {
+  resize: vertical;
+}
+
+.ticket-form__select:focus,
+.ticket-form__textarea:focus {
+  outline: 0;
+  border-color: var(--primary-blue);
+  box-shadow: var(--focus-ring);
+}
+
+.ticket-form__meta {
+  margin: var(--size-s) 0 0;
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small);
+}
+
+/* Clever's primary Button. */
+.ticket-form__submit {
+  margin-top: var(--size-s);
+  padding: var(--size-xs) var(--size-m);
+  border: var(--border-width-s) solid var(--primary-blue);
+  border-radius: var(--radius-l);
+  background-color: var(--primary-blue);
+  color: var(--neutral-white);
+  font-family: inherit;
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--timing-promptly) ease-out;
+}
+
+.ticket-form__submit:hover {
+  border-color: var(--primary-blue-shade-1);
+  background-color: var(--primary-blue-shade-1);
+}
+
+.ticket-form__receipt {
+  max-width: 32rem;
+  margin: var(--size-m) 0 0;
+  padding: var(--size-m);
+  border: var(--border-width-s) solid var(--alert-green);
+  border-radius: var(--radius-l);
+  background-color: rgb(29 169 120 / 6%);
+}
+
+.ticket-form__receipt-title {
+  display: flex;
+  align-items: center;
+  gap: var(--size-2xs);
+  margin: 0;
+  color: var(--alert-green);
+  font-size: var(--type-medium);
+  font-weight: 600;
+}
+
+.ticket-form__receipt-body {
+  margin: var(--size-xs) 0 0;
+  color: var(--neutral-dark-gray);
+  font-size: var(--type-small-medium);
+  line-height: 1.5;
+}
+
+.ticket-form__again {
+  margin-top: var(--size-s);
+  color: var(--primary-blue);
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+}
+
+.ticket-form__again:hover,
+.ticket-form__again:focus {
+  color: var(--primary-blue-shade-2);
+  text-decoration: underline;
+}

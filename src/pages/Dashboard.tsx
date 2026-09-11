@@ -7,6 +7,7 @@ import { resources } from "../data/apps";
 import { sectionTitles } from "../data/navigation";
 import { teacherPages } from "../data/teacherPages";
 import { student } from "../data/student";
+import type { TileSize } from "../components/ResourceTile";
 import type { Resource, SectionId } from "../data/types";
 import "./Dashboard.css";
 
@@ -19,6 +20,8 @@ interface Props {
   scrollTarget: SectionId | null;
   onScrolled: () => void;
   onVisibleSectionChange: (id: SectionId) => void;
+  onOpenLibrary: () => void;
+  tileSize: TileSize;
 }
 
 /** Distance below the bar at which a section counts as the current one. */
@@ -39,6 +42,8 @@ export function Dashboard({
   scrollTarget,
   onScrolled,
   onVisibleSectionChange,
+  onOpenLibrary,
+  tileSize,
 }: Props) {
   const mainRef = useRef<HTMLElement>(null);
   const favorites = resources.filter((resource) => isFavorite(resource.id));
@@ -100,6 +105,7 @@ export function Dashboard({
       icon={resource.icon}
       notes={resource.notes}
       notify={resource.notify}
+      size={tileSize}
       target={resource.target}
       onActivate={() => onOpenResource(resource)}
       favorite={isFavorite(resource.id)}
@@ -115,6 +121,7 @@ export function Dashboard({
             <TeacherPageTile
               key={page.id}
               page={page}
+              size={tileSize}
               onOpen={() => onOpenTeacherPage(page.id)}
             />
           ))}
@@ -133,14 +140,23 @@ export function Dashboard({
       {RESOURCE_SECTIONS.map((sectionId) => {
         const sectionResources = resources.filter((resource) => resource.section === sectionId);
         return (
-          <Section key={sectionId} id={sectionId} title={sectionTitles[sectionId]}>
+          <Section
+            key={sectionId}
+            id={sectionId}
+            title={sectionTitles[sectionId]}
+            action={
+              sectionId === "clever-library"
+                ? { label: "Browse the library", onClick: onOpenLibrary }
+                : undefined
+            }
+          >
             <ResourceGrid>{sectionResources.map(renderTile)}</ResourceGrid>
           </Section>
         );
       })}
 
       <p className="dashboard__footnote">
-        {student.district} · {student.school}
+        {student.district} · {student.school} · {student.homeroom}
       </p>
     </main>
   );

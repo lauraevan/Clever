@@ -5,16 +5,21 @@ import { SearchControl } from "./SearchControl";
 import { TopBarButton } from "./TopBarButton";
 import { BarsIcon, GridIcon } from "../lib/icons";
 import { student } from "../data/student";
+import type { Route } from "../lib/router";
 import type { SearchResult } from "../lib/search";
+import type { PortalNotification } from "../data/types";
 import "./CleverHeader.css";
 
 interface Props {
   onGoHome: () => void;
   onOpenResult: (result: SearchResult) => void;
-  onLogOut: () => void;
-  onOpenDemoNotice: (title: string) => void;
+  onNavigate: (route: Route) => void;
   onToggleNav: () => void;
   navOpen: boolean;
+  notifications: PortalNotification[];
+  onMarkAllRead: () => void;
+  /** Underlines the Portal control while the portal itself is on screen. */
+  portalActive: boolean;
 }
 
 /**
@@ -26,10 +31,12 @@ interface Props {
 export function CleverHeader({
   onGoHome,
   onOpenResult,
-  onLogOut,
-  onOpenDemoNotice,
+  onNavigate,
   onToggleNav,
   navOpen,
+  notifications,
+  onMarkAllRead,
+  portalActive,
 }: Props) {
   return (
     <header className="clever-header" role="banner">
@@ -57,15 +64,19 @@ export function CleverHeader({
       <div className="clever-header__controls">
         <SearchControl onOpenResult={onOpenResult} />
 
-        <TopBarButton active onClick={onGoHome} className="clever-header__portal">
+        <TopBarButton active={portalActive} onClick={onGoHome} className="clever-header__portal">
           <span className="clever-header__portal-inner">
             <GridIcon size="1rem" />
             <span className="clever-header__portal-label">Portal</span>
           </span>
         </TopBarButton>
 
-        <NotificationsMenu />
-        <ProfileMenu onLogOut={onLogOut} onOpenDemoNotice={onOpenDemoNotice} />
+        <NotificationsMenu
+          notifications={notifications}
+          onMarkAllRead={onMarkAllRead}
+          onViewAll={() => onNavigate({ name: "notifications" })}
+        />
+        <ProfileMenu onNavigate={onNavigate} />
       </div>
     </header>
   );
