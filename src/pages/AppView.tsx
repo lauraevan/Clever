@@ -1,6 +1,7 @@
 import { LongArrowLeftIcon, WarningIcon } from "../lib/icons";
 import type { Resource } from "../data/types";
 import "./AppView.css";
+import { assetUrl } from "../lib/assetUrl";
 
 interface Props {
   resource: Resource | undefined;
@@ -30,7 +31,7 @@ export function AppView({ resource, onBack }: Props) {
         </div>
       ) : (
         <div className="app-view__panel">
-          <img className="app-view__icon" src={resource.icon} alt="" role="presentation" />
+          <img className="app-view__icon" src={assetUrl(resource.icon)} alt="" role="presentation" />
           <h1 className="app-view__title">{resource.title}</h1>
 
           <p className="app-view__body">

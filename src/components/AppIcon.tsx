@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { hasBundledLogo, logoUrl } from "../lib/logoSource";
 import "./AppIcon.css";
+import { assetUrl } from "../lib/assetUrl";
 
 interface Props {
   /** Resource id, used to decide whether the bundled tile is already real. */
@@ -45,7 +46,8 @@ function plateColor(title: string): string {
  */
 export function AppIcon({ id, src, domain, title, remote }: Props) {
   const service = remote || hasBundledLogo(id) ? null : logoUrl(domain);
-  const chain = service ? [service, src] : [src];
+  const local = assetUrl(src);
+  const chain = service ? [service, local] : [local];
 
   // A new source resets the chain, so a tile doesn't inherit another's failure.
   // Adjusted during render rather than in an effect, per React's guidance.

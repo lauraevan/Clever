@@ -2,6 +2,7 @@ import { CleverLogo } from "../components/CleverLogo";
 import { BuildingIcon, CleverBadgeIcon, QuestionCircleIcon } from "../lib/icons";
 import { student } from "../data/student";
 import "./SignIn.css";
+import { assetUrl } from "../lib/assetUrl";
 
 interface Props {
   onSignIn: () => void;
@@ -35,7 +36,7 @@ export function SignIn({ onSignIn }: Props) {
           </button>
 
           <button type="button" className="sign-in__provider" onClick={onSignIn}>
-            <img className="sign-in__provider-mark" src="/app-icons/google-drive.svg" alt="" />
+            <img className="sign-in__provider-mark" src={assetUrl("/app-icons/google-drive.svg")} alt="" />
             Log in with Google
           </button>
 

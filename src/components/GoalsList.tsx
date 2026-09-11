@@ -1,6 +1,7 @@
 import { CheckIcon } from "../lib/icons";
 import { goals } from "../data/goals";
 import "./GoalsList.css";
+import { assetUrl } from "../lib/assetUrl";
 
 /** Progress against this week's goals, one row per app. */
 export function GoalsList() {
@@ -12,7 +13,7 @@ export function GoalsList() {
 
         return (
           <li className="goals__item" key={goal.id}>
-            <img className="goals__icon" src={goal.icon} alt="" role="presentation" />
+            <img className="goals__icon" src={assetUrl(goal.icon)} alt="" role="presentation" />
 
             <div className="goals__detail">
               <div className="goals__row">

@@ -3,6 +3,7 @@ import { CloseIcon, SearchIcon } from "../lib/icons";
 import { TopBarButton } from "./TopBarButton";
 import { searchPortal, type SearchResult } from "../lib/search";
 import "./SearchControl.css";
+import { assetUrl } from "../lib/assetUrl";
 
 interface Props {
   onOpenResult: (result: SearchResult) => void;
@@ -135,7 +136,7 @@ export function SearchControl({ onOpenResult }: Props) {
                     onClick={() => choose(result)}
                   >
                     {result.icon ? (
-                      <img className="search-control__result-icon" src={result.icon} alt="" />
+                      <img className="search-control__result-icon" src={assetUrl(result.icon)} alt="" />
                     ) : (
                       <span
                         className="search-control__result-icon search-control__result-monogram"
