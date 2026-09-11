@@ -1,0 +1,45 @@
+/* Mirrors src/LeftNav/LeftNav.less in clever-components. */
+
+.clever-sidebar {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: var(--nav-pane-width);
+  /* The bar is fixed; the nav sits directly beneath it and holds its place. */
+  position: sticky;
+  top: var(--topbar-height);
+  height: calc(100vh - var(--topbar-height));
+  overflow-y: auto;
+  border-right: var(--border-width-s) solid var(--neutral-silver);
+  background: var(--neutral-off-white);
+  color: var(--sidebar-text);
+  user-select: none;
+}
+
+.clever-sidebar__scrim {
+  display: none;
+}
+
+@media (max-width: 47.9375rem) {
+  .clever-sidebar {
+    position: fixed;
+    top: var(--topbar-height);
+    left: 0;
+    z-index: var(--z-2);
+    transform: translateX(-100%);
+    transition: transform var(--timing-promptly) var(--motion-smooth);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .clever-sidebar--open {
+    transform: translateX(0);
+  }
+
+  .clever-sidebar__scrim {
+    display: block;
+    position: fixed;
+    inset: var(--topbar-height) 0 0 0;
+    z-index: var(--z-1);
+    background-color: rgb(21 19 28 / 30%);
+    cursor: default;
+  }
+}

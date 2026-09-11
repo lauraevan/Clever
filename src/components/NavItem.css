@@ -1,0 +1,71 @@
+/* Mirrors src/LeftNav/NavLink.less in clever-components. */
+
+.nav-item {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--size-m) 0 var(--size-m) var(--nav-link-padding-left);
+  color: var(--sidebar-text);
+  font-size: var(--type-medium);
+  transition-property: background-color, box-shadow, padding;
+  transition-duration: var(--timing-promptly);
+  transition-timing-function: ease-out;
+}
+
+.nav-item:active,
+.nav-item:focus,
+.nav-item:hover {
+  /* Lighter than the selected rule so the current item stays distinguishable. */
+  box-shadow: inset var(--border-width-l) 0 var(--primary-blue-tint-2);
+}
+
+.nav-item:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: -2px;
+}
+
+.nav-item--selected,
+.nav-item--selected:active,
+.nav-item--selected:focus,
+.nav-item--selected:hover {
+  box-shadow: inset var(--border-width-l) 0 var(--primary-blue);
+  font-weight: 600;
+  font-style: normal;
+}
+
+.nav-item__contents {
+  display: block;
+  height: var(--size-l);
+  line-height: var(--size-l);
+  white-space: nowrap;
+}
+
+.nav-item__icon-container {
+  display: inline-block;
+  width: var(--nav-link-icon-width);
+  height: var(--size-l);
+  margin-right: var(--nav-link-icon-margin-right);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.nav-item__icon {
+  vertical-align: middle;
+}
+
+.nav-item__label-container {
+  display: inline-block;
+  vertical-align: middle;
+  /* @linkLabelWidthNoArrow = 140 + 8 + 16 */
+  width: calc(
+    var(--nav-link-label-width) + var(--nav-link-arrow-margin-left) + var(--nav-link-arrow-width)
+  );
+}
+
+.nav-item__label {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

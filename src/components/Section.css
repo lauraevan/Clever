@@ -1,0 +1,31 @@
+.section {
+  /* Clears the fixed bar when a nav item scrolls this section into view. */
+  scroll-margin-top: calc(var(--topbar-height) + var(--size-m));
+}
+
+.section + .section {
+  margin-top: var(--size-xl);
+}
+
+.section__header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--size-xs);
+  padding-bottom: var(--size-xs);
+  margin-bottom: var(--size-m);
+  border-bottom: var(--border-width-s) solid var(--neutral-silver);
+}
+
+.section__title {
+  margin: 0;
+  color: var(--neutral-black);
+  /* Functional, not display, typography: 18px semi-bold. */
+  font-size: var(--type-medium-large);
+  font-weight: 600;
+  font-style: normal;
+}
+
+.section__meta {
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small-medium);
+}

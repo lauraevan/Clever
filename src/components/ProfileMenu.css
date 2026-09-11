@@ -1,0 +1,74 @@
+.profile-menu__trigger {
+  padding-left: var(--size-s);
+  padding-right: var(--size-s);
+}
+
+.profile-menu__trigger-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--size-xs);
+}
+
+/* A monogram chip rather than a photo; sized to sit inside the 52px control. */
+.profile-menu__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--size-xl);
+  height: var(--size-xl);
+  border-radius: 50%;
+  background-color: rgb(255 255 255 / 20%);
+  color: var(--neutral-white);
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.profile-menu__name {
+  font-size: var(--type-medium);
+  font-weight: 600;
+}
+
+.profile-menu__caret {
+  opacity: 0.9;
+}
+
+.profile-menu {
+  width: 17.5rem;
+  max-width: calc(100vw - var(--size-l));
+  white-space: normal;
+}
+
+.profile-menu__identity {
+  display: flex;
+  align-items: center;
+  gap: var(--size-s);
+  padding: var(--size-m);
+  background-color: var(--neutral-off-white);
+}
+
+.profile-menu__avatar--large {
+  width: var(--size-2xl);
+  height: var(--size-2xl);
+  background-color: var(--primary-blue);
+  font-size: var(--type-medium);
+}
+
+.profile-menu__identity-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.profile-menu__identity-name {
+  color: var(--neutral-black);
+  font-size: var(--type-medium);
+  font-weight: 600;
+}
+
+.profile-menu__identity-meta {
+  margin-top: var(--size-4xs);
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small);
+}

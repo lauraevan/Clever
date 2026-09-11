@@ -1,0 +1,60 @@
+/* Mirrors src/TopBar/TopBarButton.less in clever-components. */
+
+.top-bar-button__container {
+  display: flex;
+  position: relative;
+}
+
+.top-bar-button {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: stretch;
+  justify-content: center;
+  box-sizing: border-box;
+  /* @topBarHeight - @size_xs */
+  height: calc(var(--topbar-height) - var(--size-xs));
+  padding: 0 var(--size-m);
+  border-radius: var(--radius-m);
+  color: var(--neutral-white);
+  font-weight: 600;
+  font-style: normal;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.top-bar-button:focus,
+.top-bar-button:hover {
+  background-color: rgb(0 0 0 / 15%);
+  color: var(--neutral-white);
+}
+
+.top-bar-button:focus-visible {
+  outline: 2px solid var(--neutral-white);
+  outline-offset: -2px;
+}
+
+.top-bar-button__active-indicator {
+  position: absolute;
+  display: block;
+  box-sizing: border-box;
+  height: 3px;
+  left: var(--size-s);
+  right: var(--size-s);
+  bottom: var(--size-s);
+  border-radius: var(--size-3xs);
+  background-color: var(--neutral-white);
+  box-shadow: var(--shadow-topbar);
+  opacity: 0.8;
+}
+
+.top-bar-button--round {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.top-bar-button--round + .top-bar-button__active-indicator {
+  display: none;
+}

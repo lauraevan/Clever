@@ -1,0 +1,142 @@
+/**
+ * Clever design tokens ("Dewey" design system).
+ *
+ * Every value in this file is transcribed from Clever's own published component
+ * library, `clever-components` (github.com/Clever/components), so that the
+ * replica uses Clever's real colors, sizes, radii and shadows rather than
+ * estimates. Source files are noted per block.
+ */
+
+:root {
+  /* ---- Primary colors (src/genColors.ts) ---- */
+  --primary-blue: #436cf2;
+  --primary-blue-shade-1: #3158d7;
+  --primary-blue-shade-2: #2146bd;
+  --primary-blue-shade-3: #16328d;
+  --primary-blue-tint-1: #6486f8;
+  --primary-blue-tint-2: #809dff;
+  /* TopBar a11y hover: 3:1 contrast against primary blue (src/TopBar/common.less) */
+  --primary-blue-hover: #002b6a;
+
+  /* ---- Neutral colors (src/genColors.ts) ---- */
+  --neutral-black: #15131c;
+  --neutral-dark-gray: #474c5e;
+  --neutral-medium-gray: #686f88;
+  --neutral-gray: #a8aeba;
+  --neutral-silver: #e3e6eb;
+  --neutral-off-white: #fafbfc;
+  --neutral-white: #fff;
+
+  /* ---- Alert colors (src/genColors.ts) ---- */
+  --alert-green: #1da978;
+  --alert-orange: #f59520;
+  --alert-red: #e02b3a;
+  --alert-red-shade-1: #c6212e;
+
+  /* ---- Accent colors (src/genColors.ts) ---- */
+  --accent-teal: #29c6c1;
+  --accent-pink: #f03797;
+  --accent-purple: #7e1dff;
+
+  /* ---- Semantic aliases ---- */
+  --header-bg: var(--primary-blue);
+  --header-text: var(--neutral-white);
+  --body-text: var(--neutral-black);
+  --secondary-text: var(--neutral-medium-gray);
+  --sidebar-bg: var(--neutral-off-white);
+  --sidebar-text: var(--primary-blue-shade-2);
+  --page-bg: var(--neutral-white);
+  --border: var(--neutral-silver);
+  --hover: rgb(0 0 0 / 15%);
+
+  /* ---- Sizing scale (src/less/sizing.less) ---- */
+  --size-none: 0;
+  --size-4xs: 0.0625rem;  /* 1px  */
+  --size-3xs: 0.125rem;   /* 2px  */
+  --size-2xs: 0.25rem;    /* 4px  */
+  --size-xs: 0.5rem;      /* 8px  */
+  --size-s: 0.75rem;      /* 12px */
+  --size-m: 1rem;         /* 16px */
+  --size-l: 1.5rem;       /* 24px */
+  --size-xl: 2rem;        /* 32px */
+  --size-2xl: 2.5rem;     /* 40px */
+  --size-3xl: 3rem;       /* 48px */
+  --size-4xl: 3.5rem;     /* 56px */
+  --size-5xl: 4rem;       /* 64px */
+
+  /* ---- Type sizes (src/less/type-size.less) ---- */
+  --type-tiny: 0.625rem;         /* 10px */
+  --type-small: 0.75rem;         /* 12px */
+  --type-small-medium: 0.875rem; /* 14px */
+  --type-medium: 1rem;           /* 16px */
+  --type-medium-large: 1.125rem; /* 18px */
+  --type-large: 1.5rem;          /* 24px */
+  --type-huge: 2rem;             /* 32px */
+
+  /* ---- Border widths (src/less/border.less) ---- */
+  --border-width-s: 0.0625rem;  /* 1px */
+  --border-width-m: 0.125rem;   /* 2px */
+  --border-width-l: 0.1875rem;  /* 3px */
+  --border-width-xl: 0.25rem;   /* 4px */
+
+  /* ---- Border radii (src/less/border_radius.less) ---- */
+  --radius-0: 0;
+  --radius-s: 0.125rem;   /* 2px */
+  --radius-m: 0.1875rem;  /* 3px */
+  --radius-l: 0.25rem;    /* 4px */
+  --radius-xl: 0.5rem;    /* 8px */
+  --radius-10percent: 10%;
+
+  /* ---- Box shadows (src/less/box-shadow.less) ---- */
+  --shadow-color: rgb(71 76 94 / 20%);
+  --shadow-light: 0 0.0625rem 0.1875rem 0.0625rem var(--shadow-color);
+  --shadow-medium: 0 0.1875rem 0.375rem 0.0625rem var(--shadow-color);
+  --shadow-heavy: 0 0.3125rem 0.75rem 0.0625rem var(--shadow-color);
+  /* Tile hover shadow: .boxShadow(@boxShadowBlurRadiusS, @boxShadowDefaultColor) */
+  --shadow-tile-hover: 0 0.1875rem 0.1875rem 0.0625rem var(--shadow-color);
+  /* TopBar (src/TopBar/index.less) */
+  --shadow-topbar: 0 1px 6px 2px rgb(33 70 189 / 25%);
+  /* Menu dropdown (src/Menu/Menu.less) */
+  --shadow-menu: 0 var(--size-3xs) var(--size-2xs) rgb(21 19 28 / 10%);
+
+  /* ---- Motion (src/less/animations.less) ---- */
+  --timing-instantly: 0s;
+  --timing-immediately: 50ms;
+  --timing-quickly: 100ms;
+  --timing-promptly: 200ms;
+  --timing-slowly: 400ms;
+  --motion-linear: cubic-bezier(0.25, 0.25, 0.75, 0.75);
+  --motion-smooth: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+  /* ---- Layout (src/TopBar/common.less, src/LeftNav/sizing.less) ---- */
+  --topbar-height: 3.75rem; /* 60px */
+  /* @paneWidth = 16 + 24 + 12 + 140 + 8 + 16 + 8 + 0 + 1px border = 225px */
+  --nav-pane-width: 14.0625rem; /* 225px */
+  --nav-link-padding-left: var(--size-m);
+  --nav-link-icon-width: var(--size-l);
+  --nav-link-icon-margin-right: var(--size-s);
+  --nav-link-label-width: 8.75rem; /* 140px */
+  --nav-link-arrow-margin-left: var(--size-xs);
+  --nav-link-arrow-width: var(--size-m);
+  --nav-link-arrow-margin-right: var(--size-xs);
+
+  /* ---- ResourceTile (src/ResourceTile/ResourceTile.less) ---- */
+  --tile-icon-size-small: 5rem;    /* 80px  */
+  --tile-icon-size-medium: 6.5rem; /* 104px */
+  --tile-icon-size-large: 8rem;    /* 128px */
+  --tile-padding-small: 0.75rem;   /* 12px */
+  --tile-padding-medium: 0.875rem; /* 14px */
+  --tile-padding-large: 1rem;      /* 16px */
+  --tile-font-size-small: 0.75rem;
+  --tile-font-size-medium: 0.875rem;
+  --tile-font-size-large: 1rem;
+
+  /* ---- Focus ring (src/TextInput2/TextInput2.less) ---- */
+  --focus-ring: 0 0 0 var(--size-2xs) rgb(128 157 255 / 50%);
+
+  /* ---- Z-index (src/less/z-index.less) ---- */
+  --z-0: 0;
+  --z-1: 1;
+  --z-2: 2;
+  --z-3: 3;
+}

@@ -1,0 +1,18 @@
+/* Mirrors src/Logo/index.less in clever-components. */
+
+.clever-logo {
+  display: flex;
+  align-items: flex-start;
+}
+
+.clever-logo__image {
+  flex-shrink: 0;
+  height: 1em;
+  /* Aspect ratio of the 198x55 viewBox, as in the original. */
+  width: calc(198em / 55);
+  transition: all var(--timing-promptly) ease-out;
+}
+
+.clever-logo__text {
+  transition: all var(--timing-promptly) ease-out;
+}

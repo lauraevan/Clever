@@ -1,0 +1,11 @@
+.resource-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.resource-grid__empty {
+  padding: var(--size-m) 0 var(--size-l);
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small-medium);
+}

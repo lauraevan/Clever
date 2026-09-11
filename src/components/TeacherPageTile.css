@@ -1,0 +1,16 @@
+.teacher-page-tile__plate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  /* Matches the proportional rounding Clever gives app artwork. */
+  border-radius: var(--radius-10percent);
+}
+
+.teacher-page-tile__initials {
+  color: var(--neutral-white);
+  font-size: var(--type-huge);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}

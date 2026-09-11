@@ -1,0 +1,79 @@
+.demo-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: var(--size-l) var(--size-m);
+  background-color: var(--neutral-off-white);
+}
+
+.demo-login__card {
+  width: 100%;
+  max-width: 26rem;
+  padding: var(--size-xl);
+  border: var(--border-width-s) solid var(--neutral-silver);
+  border-radius: var(--radius-l);
+  background-color: var(--neutral-white);
+  box-shadow: var(--shadow-light);
+  text-align: center;
+}
+
+.demo-login__logo {
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.demo-login__eyebrow {
+  margin: var(--size-l) 0 0;
+  color: var(--neutral-gray);
+  font-size: var(--type-small);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.demo-login__title {
+  margin: var(--size-2xs) 0 0;
+  color: var(--neutral-black);
+  font-size: var(--type-medium-large);
+  font-weight: 600;
+}
+
+.demo-login__body {
+  margin: var(--size-s) 0 0;
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small-medium);
+  line-height: 1.5;
+}
+
+/* Clever's primary Button: blue ground, 4px radius, white semi-bold label. */
+.demo-login__button {
+  width: 100%;
+  margin-top: var(--size-l);
+  padding: var(--size-s) var(--size-m);
+  border: var(--border-width-s) solid var(--primary-blue);
+  border-radius: var(--radius-l);
+  background-color: var(--primary-blue);
+  color: var(--neutral-white);
+  font-family: inherit;
+  font-size: var(--type-medium);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--timing-promptly) ease-out;
+}
+
+.demo-login__button:hover {
+  border-color: var(--primary-blue-shade-1);
+  background-color: var(--primary-blue-shade-1);
+}
+
+.demo-login__button:active {
+  border-color: var(--primary-blue-shade-2);
+  background-color: var(--primary-blue-shade-2);
+}
+
+.demo-login__meta {
+  margin: var(--size-m) 0 0;
+  color: var(--neutral-gray);
+  font-size: var(--type-small);
+}

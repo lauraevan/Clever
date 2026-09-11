@@ -1,0 +1,208 @@
+/*
+ * Mirrors src/ResourceTile/ResourceTile.less in clever-components.
+ *
+ * Sizes there are deliberately off Clever's own spacing scale ("The Dewey
+ * sizing mixins aren't granular enough, so we're using custom values"), so the
+ * 12/14/16px paddings and 80/104/128px icons below are copied as-is.
+ */
+
+.resource-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: flex-start;
+  margin-right: var(--size-xs);
+  margin-bottom: var(--size-xs);
+  border-radius: var(--radius-xl);
+  z-index: var(--z-0);
+}
+
+.resource-tile__link {
+  display: flex;
+  flex-direction: column;
+  color: var(--neutral-black);
+  text-decoration: none;
+}
+
+.resource-tile__icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resource-tile__icon {
+  max-width: 100%;
+  max-height: 100%;
+  /* Clever rounds icon artwork proportionally rather than at a fixed radius. */
+  border-radius: var(--radius-10percent);
+}
+
+.resource-tile__title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0;
+}
+
+.resource-tile__title-and-notes {
+  display: flex;
+  align-items: center;
+}
+
+.resource-tile__title {
+  overflow: hidden;
+  overflow-wrap: break-word;
+  text-align: center;
+}
+
+.resource-tile__notes,
+.resource-tile__unavailable-label {
+  margin-top: var(--size-2xs);
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small);
+  text-align: center;
+}
+
+/* ---- large (the component's default) ---- */
+.resource-tile--large .resource-tile__icon-container {
+  width: var(--tile-icon-size-large);
+  height: var(--tile-icon-size-large);
+  margin: var(--tile-padding-large);
+}
+
+.resource-tile--large .resource-tile__title-container {
+  margin: var(--tile-padding-large);
+  margin-top: 0;
+}
+
+.resource-tile--large .resource-tile__title-and-notes {
+  max-width: var(--tile-icon-size-large);
+  font-size: var(--tile-font-size-large);
+}
+
+/* ---- medium ---- */
+.resource-tile--medium .resource-tile__icon-container {
+  width: var(--tile-icon-size-medium);
+  height: var(--tile-icon-size-medium);
+  margin: var(--tile-padding-medium);
+}
+
+.resource-tile--medium .resource-tile__title-container {
+  margin: var(--tile-padding-medium);
+  margin-top: 0;
+}
+
+.resource-tile--medium .resource-tile__title-and-notes {
+  max-width: var(--tile-icon-size-medium);
+  font-size: var(--tile-font-size-medium);
+}
+
+/* ---- small ---- */
+.resource-tile--small .resource-tile__icon-container {
+  width: var(--tile-icon-size-small);
+  height: var(--tile-icon-size-small);
+  margin: var(--tile-padding-small);
+}
+
+.resource-tile--small .resource-tile__title-container {
+  margin: var(--tile-padding-small);
+  margin-top: 0;
+}
+
+.resource-tile--small .resource-tile__title-and-notes {
+  max-width: var(--tile-icon-size-small);
+  font-size: var(--tile-font-size-small);
+}
+
+/*
+ * Hover is a single soft shadow and nothing else. Clever animates it on an
+ * ::after placed behind the tile, because box-shadow itself animates poorly:
+ * see .boxShadowHoverAnimation in src/less/animations.less.
+ */
+.resource-tile::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-xl);
+  z-index: -1;
+  box-shadow: var(--shadow-tile-hover);
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--timing-promptly) var(--motion-linear),
+    visibility var(--timing-instantly) var(--motion-linear) var(--timing-promptly);
+}
+
+@media (hover: hover) {
+  .resource-tile:hover::after,
+  .resource-tile:focus-within::after {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity var(--timing-promptly) var(--motion-linear);
+  }
+}
+
+/* Red dot for tiles with new activity. */
+.resource-tile__notification {
+  position: absolute;
+  top: var(--size-xs);
+  right: var(--size-xs);
+  width: var(--size-l);
+  height: var(--size-l);
+  border-radius: 50%;
+  background-color: var(--alert-red-shade-1);
+  z-index: var(--z-2);
+}
+
+/* Favourite control: a small outline heart that fills once set. */
+.resource-tile__favorite {
+  position: absolute;
+  top: var(--size-xs);
+  left: var(--size-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-l);
+  height: var(--size-l);
+  border-radius: 50%;
+  color: var(--neutral-gray);
+  opacity: 0;
+  transition: opacity var(--timing-promptly) var(--motion-linear);
+  z-index: var(--z-2);
+}
+
+.resource-tile:hover .resource-tile__favorite,
+.resource-tile:focus-within .resource-tile__favorite,
+.resource-tile__favorite:focus-visible,
+.resource-tile__favorite--on {
+  opacity: 1;
+}
+
+.resource-tile__favorite:hover {
+  color: var(--neutral-dark-gray);
+}
+
+.resource-tile__favorite--on,
+.resource-tile__favorite--on:hover {
+  color: var(--accent-pink);
+}
+
+/* Apps the school has not finished setting up read back as muted. */
+.resource-tile--unavailable .resource-tile__icon {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.resource-tile--unavailable .resource-tile__title {
+  color: var(--neutral-medium-gray);
+}
+
+@media (hover: none) {
+  .resource-tile__favorite {
+    opacity: 1;
+  }
+}

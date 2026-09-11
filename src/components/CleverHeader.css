@@ -1,0 +1,105 @@
+/* Mirrors src/TopBar/index.less in clever-components. */
+
+.clever-header {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 0;
+  height: var(--topbar-height);
+  padding: 0 var(--size-2xs);
+  /* The bar has a rounded profile control at its right end, which Clever pads. */
+  padding-right: var(--size-s);
+  background-color: var(--primary-blue);
+  box-shadow: var(--shadow-topbar);
+  transition: all var(--timing-promptly) ease-out;
+}
+
+.clever-header__logo-link {
+  padding-left: var(--size-m);
+  padding-right: var(--size-m);
+}
+
+.clever-header__logo {
+  flex-shrink: 0;
+  /* The logo is sized by font-size; 1.75rem tall matches Clever's TopBar. */
+  font-size: 1.75rem;
+}
+
+.clever-header__title {
+  margin: 0 var(--size-xs);
+  padding: 0;
+  color: var(--neutral-white);
+  font-size: var(--type-medium);
+  font-weight: normal;
+  font-style: normal;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clever-header__controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.clever-header__portal-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--size-xs);
+}
+
+/* The hamburger only appears once the sidebar collapses. */
+.clever-header__nav-toggle {
+  display: none;
+}
+
+@media (max-width: 47.9375rem) {
+  .clever-header {
+    padding-right: var(--size-2xs);
+  }
+
+  .clever-header__nav-toggle {
+    display: flex;
+    padding: 0 var(--size-s);
+  }
+
+  .clever-header__logo-link {
+    padding-left: var(--size-xs);
+    padding-right: var(--size-xs);
+  }
+
+  /* The school name gives way to the controls before they start to squeeze. */
+  .clever-header__title {
+    display: none;
+  }
+
+  .clever-header__portal-label,
+  .search-control__trigger-label {
+    display: none;
+  }
+
+  .clever-header__portal,
+  .search-control__trigger-inner {
+    gap: 0;
+  }
+
+  .profile-menu__name {
+    display: none;
+  }
+}
+
+@media (max-width: 64rem) {
+  .search-control__field {
+    width: 15rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .search-control__field {
+    width: 11rem;
+  }
+}

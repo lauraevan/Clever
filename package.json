@@ -1,0 +1,38 @@
+{
+  "name": "clever-student-portal-replica",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "oxlint",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "generate:icons": "node scripts/generate-icons.mjs",
+    "generate:app-icons": "node scripts/generate-app-icons.mjs",
+    "generate": "npm run generate:icons && npm run generate:app-icons",
+    "check:geometry": "node scripts/measure.mjs",
+    "check:a11y": "node scripts/a11y-check.mjs",
+    "check:nav": "node scripts/scrollspy-check.mjs",
+    "check": "npm run typecheck && npm run lint && npm run check:geometry && npm run check:a11y && npm run check:nav"
+  },
+  "dependencies": {
+    "@fontsource/figtree": "^5.3.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "simple-icons": "^16.30.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "font-awesome": "^4.7.0",
+    "oxlint": "^1.81.0",
+    "playwright": "^1.63.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  },
+  "description": "A local, demo-only recreation of the Clever student portal interface."
+}

@@ -1,0 +1,108 @@
+.notifications__bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Clever marks unread state with its alert red, as on ResourceTile--notification. */
+.notifications__badge {
+  position: absolute;
+  top: -2px;
+  right: -3px;
+  width: var(--size-xs);
+  height: var(--size-xs);
+  border-radius: 50%;
+  background-color: var(--alert-red-shade-1);
+  box-shadow: 0 0 0 var(--border-width-m) var(--primary-blue);
+}
+
+.notifications {
+  width: 20rem;
+  max-width: calc(100vw - var(--size-l));
+  white-space: normal;
+}
+
+.notifications__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--size-s);
+  padding: var(--size-s) var(--size-m);
+  border-bottom: var(--border-width-s) solid var(--neutral-silver);
+  background-color: var(--neutral-off-white);
+}
+
+.notifications__title {
+  margin: 0;
+  color: var(--neutral-dark-gray);
+  font-size: var(--type-medium);
+  font-weight: 600;
+}
+
+.notifications__mark {
+  color: var(--primary-blue);
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+}
+
+.notifications__mark:hover,
+.notifications__mark:focus {
+  color: var(--primary-blue-shade-2);
+  text-decoration: underline;
+}
+
+.notifications__list {
+  max-height: 21rem;
+  overflow-y: auto;
+}
+
+.notifications__item {
+  padding: var(--size-s) var(--size-m);
+  border-bottom: var(--border-width-s) solid var(--neutral-silver);
+}
+
+.notifications__list li:last-child .notifications__item {
+  border-bottom: 0;
+}
+
+.notifications__item--unread {
+  box-shadow: inset var(--border-width-l) 0 var(--primary-blue);
+}
+
+.notifications__item-title {
+  margin: 0;
+  color: var(--neutral-black);
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.notifications__item-body {
+  margin: var(--size-2xs) 0 0;
+  color: var(--neutral-dark-gray);
+  font-size: var(--type-small-medium);
+  line-height: 1.4;
+}
+
+.notifications__item-time {
+  margin: var(--size-2xs) 0 0;
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small);
+}
+
+.notifications__empty,
+.notifications__caught-up {
+  display: flex;
+  align-items: center;
+  gap: var(--size-2xs);
+  margin: 0;
+  padding: var(--size-m);
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small-medium);
+}
+
+.notifications__caught-up {
+  border-top: var(--border-width-s) solid var(--neutral-silver);
+  padding: var(--size-xs) var(--size-m);
+}

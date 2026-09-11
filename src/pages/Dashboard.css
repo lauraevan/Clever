@@ -1,0 +1,27 @@
+.dashboard {
+  flex: 1;
+  min-width: 0;
+  /*
+   * Tiles carry 16px of internal padding, so the page padding is set 16px
+   * short of the intended optical margin: icon artwork lands 32px from the
+   * sidebar rule, and section headings sit flush at 16px.
+   */
+  padding: var(--size-l) var(--size-m) var(--size-3xl);
+  background-color: var(--page-bg);
+}
+
+.dashboard:focus {
+  outline: 0;
+}
+
+.dashboard__footnote {
+  margin: var(--size-xl) 0 0;
+  color: var(--neutral-gray);
+  font-size: var(--type-small);
+}
+
+@media (max-width: 47.9375rem) {
+  .dashboard {
+    padding: var(--size-m) var(--size-xs) var(--size-xl);
+  }
+}

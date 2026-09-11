@@ -1,0 +1,80 @@
+/* Mirrors src/Menu/Menu.less and src/Menu/MenuItem.less in clever-components. */
+
+.menu {
+  display: inline-block;
+  position: relative;
+}
+
+.menu__dropdown {
+  position: absolute;
+  box-sizing: border-box;
+  margin-top: var(--size-2xs);
+  padding-left: 0;
+  list-style: none;
+  border: var(--border-width-s) solid var(--neutral-silver);
+  border-radius: var(--radius-m);
+  background-color: var(--neutral-white);
+  box-shadow: var(--shadow-menu);
+  overflow: auto;
+  z-index: var(--z-3);
+  white-space: nowrap;
+}
+
+.menu__dropdown--left {
+  left: 0;
+}
+
+.menu__dropdown--right {
+  right: 0;
+}
+
+/* MenuItem: 16px padding, black label, blue inset rule on hover/focus. */
+.menu__item {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--size-m);
+  border-radius: 0;
+  background-color: var(--neutral-white);
+  color: var(--neutral-black);
+  font-size: var(--type-medium);
+  text-decoration: none;
+  transition: all var(--timing-promptly) ease-out;
+}
+
+.menu__item:hover,
+.menu__item:focus {
+  background-color: rgb(128 157 255 / 10%);
+  box-shadow: inset var(--border-width-l) 0 var(--primary-blue-shade-2);
+  color: var(--primary-blue-shade-2);
+}
+
+.menu__item:active {
+  background-color: rgb(128 157 255 / 20%);
+  box-shadow: inset var(--border-width-l) 0 var(--primary-blue-shade-3);
+  color: var(--primary-blue-shade-3);
+}
+
+.menu__item-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--size-s);
+}
+
+.menu__item-icon {
+  flex-shrink: 0;
+  width: var(--size-m);
+  color: var(--neutral-medium-gray);
+}
+
+.menu__item:hover .menu__item-icon,
+.menu__item:focus .menu__item-icon {
+  color: inherit;
+}
+
+.menu__divider {
+  height: var(--border-width-s);
+  margin: 0;
+  border: 0;
+  background-color: var(--neutral-silver);
+}

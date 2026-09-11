@@ -1,0 +1,121 @@
+/**
+ * Global resets and shared utilities.
+ *
+ * Typography follows Clever's own declared stack (src/less/fonts.less in
+ * clever-components):
+ *
+ *   font-family: "Proxima Nova", "Helvetica Neue", Arial, Helvetica, sans-serif;
+ *
+ * Proxima Nova is a licensed face that Clever self-hosts at
+ * assets.clever.com/fonts/*.woff, so it cannot be redistributed here. The stack
+ * below is Clever's stack verbatim with one locally bundled fallback (Figtree)
+ * inserted after it: Figtree is a humanist geometric sans with a comparable
+ * x-height and width, so the replica renders close to the real portal on
+ * machines without Proxima Nova, while still preferring the genuine face when
+ * a machine has it installed.
+ */
+
+@import "@fontsource/figtree/400.css";
+@import "@fontsource/figtree/600.css";
+@import "@fontsource/figtree/700.css";
+
+:root {
+  --font-family: "Proxima Nova", "Figtree", "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--type-medium);
+  color: var(--body-text);
+  background-color: var(--page-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizelegibility;
+}
+
+/*
+ * Clever's .button--reset (src/less/resets.less).
+ *
+ * The original clears the outline on :focus outright, which predates
+ * :focus-visible and would leave keyboard users with no focus indicator at all.
+ * The clearing is scoped to non-keyboard focus here so pointer interaction looks
+ * the same as Clever's while keyboard focus stays visible.
+ */
+.button-reset {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  font: inherit;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+  transition: all var(--timing-promptly) ease-out;
+}
+
+/*
+ * Clever's reset transitions `all`, which would animate the focus ring's width
+ * and offset in over 200ms. A focus indicator has to be there the instant focus
+ * lands, so outline is kept out of the transition.
+ */
+.button-reset:focus-visible {
+  transition-property: background-color, color, box-shadow;
+}
+
+.button-reset:active,
+.button-reset:hover,
+.button-reset:focus:not(:focus-visible) {
+  background: none;
+  outline: 0;
+  text-decoration: none;
+}
+
+.list-reset {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Accessible hiding, copied from Clever's TextInput2--label--hidden */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Clever focuses with a blue ring rather than the UA outline. */
+:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

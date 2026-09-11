@@ -1,0 +1,22 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/*
+ * The bar is fixed and the page scrolls beneath it; the sidebar sticks to the
+ * bar's underside. There is no nested scroll region.
+ */
+.clever-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-3);
+}
+
+.app__body {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  min-height: 0;
+}
