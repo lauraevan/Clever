@@ -17,7 +17,9 @@ export interface Game {
 
 export interface GameCatalog {
   repository: string;
-  cdn: string;
+  /** Images come from jsDelivr; game pages need a host that serves HTML. */
+  iconCdn: string;
+  pageCdn: string;
   /** Date the catalog was imported, as YYYY-MM-DD. */
   importedAt: string;
   sources: string[];
