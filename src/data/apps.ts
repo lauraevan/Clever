@@ -16,18 +16,30 @@ import type { Resource, ResourceSectionId, ResourceTarget } from "./types";
 const page: ResourceTarget = { kind: "page" };
 const at = (href: string): ResourceTarget => ({ kind: "external", href });
 
+/** Host a logo service can look the product up by. */
+function domainOf(target: ResourceTarget): string | undefined {
+  if (target.kind !== "external") return undefined;
+  try {
+    return new URL(target.href).hostname.replace(/^www\./, "");
+  } catch {
+    return undefined;
+  }
+}
+
 /** Terser than repeating the shared fields on a hundred-odd entries. */
 function app(
   section: ResourceSectionId,
   id: string,
   title: string,
   target: ResourceTarget,
-  extra: Partial<Pick<Resource, "notes" | "notify" | "icon">> = {},
+  extra: Partial<Pick<Resource, "notes" | "notify" | "icon" | "domain">> = {},
 ): Resource {
   return {
     id,
     title,
     icon: extra.icon ?? `/app-icons/${id}.svg`,
+    // A few products sign in on a sub-domain that has no logo of its own.
+    domain: extra.domain ?? domainOf(target),
     section,
     target,
     notes: extra.notes,
@@ -40,10 +52,10 @@ function app(
 // ===================================================================
 const classroom: Resource[] = [
   app("classroom-resources", "google-classroom", "Google Classroom", at("https://classroom.google.com"), { notify: true }),
-  app("classroom-resources", "seesaw", "Seesaw", at("https://app.seesaw.me")),
+  app("classroom-resources", "seesaw", "Seesaw", at("https://app.seesaw.me"), { domain: "seesaw.me" }),
   app("classroom-resources", "ixl", "IXL", at("https://www.ixl.com"), { notes: "20 min daily" }),
-  app("classroom-resources", "i-ready", "i-Ready", at("https://login.i-ready.com")),
-  app("classroom-resources", "lexia-core5", "Lexia Core5 Reading", at("https://www.lexialearning.com/core5")),
+  app("classroom-resources", "i-ready", "i-Ready", at("https://login.i-ready.com"), { domain: "i-ready.com" }),
+  app("classroom-resources", "lexia-core5", "Lexia Core5 Reading", at("https://www.lexialearning.com/core5"), { domain: "lexialearning.com" }),
   app("classroom-resources", "capti-voice", "Capti Voice", at("https://www.captivoice.com")),
   app("classroom-resources", "zearn", "Zearn Math", at("https://www.zearn.org")),
   app("classroom-resources", "raz-kids", "Raz-Kids", at("https://www.raz-kids.com")),
@@ -52,7 +64,7 @@ const classroom: Resource[] = [
   app("classroom-resources", "mystery-science", "Mystery Science", at("https://mysteryscience.com")),
   app("classroom-resources", "prodigy", "Prodigy Math", at("https://www.prodigygame.com")),
   app("classroom-resources", "xtramath", "XtraMath", at("https://xtramath.org")),
-  app("classroom-resources", "st-math", "ST Math", at("https://web.stmath.com")),
+  app("classroom-resources", "st-math", "ST Math", at("https://web.stmath.com"), { domain: "stmath.com" }),
   app("classroom-resources", "nearpod", "Nearpod", at("https://nearpod.com")),
   app("classroom-resources", "pear-deck", "Pear Deck", at("https://www.peardeck.com")),
   app("classroom-resources", "google-docs", "Google Docs", at("https://docs.google.com")),
@@ -69,7 +81,7 @@ const school: Resource[] = [
   app("school-resources", "sora", "Sora", at("https://soraapp.com")),
   app("school-resources", "pebblego", "PebbleGo", at("https://pebblego.com")),
   app("school-resources", "storyline-online", "Storyline Online", at("https://storylineonline.net")),
-  app("school-resources", "scholastic-news", "Scholastic News", at("https://sn56.scholastic.com")),
+  app("school-resources", "scholastic-news", "Scholastic News", at("https://sn56.scholastic.com"), { domain: "scholastic.com" }),
   app("school-resources", "studies-weekly", "Studies Weekly", at("https://www.studiesweekly.com")),
   app("school-resources", "brainpop", "BrainPOP", at("https://www.brainpop.com")),
   app("school-resources", "generation-genius", "Generation Genius", at("https://www.generationgenius.com")),
@@ -78,11 +90,12 @@ const school: Resource[] = [
   app("school-resources", "quaver-music", "QuaverMusic", at("https://www.quavered.com")),
   app("school-resources", "open-phys-ed", "OPEN Phys Ed", at("https://openphysed.org")),
   app("school-resources", "artsonia", "Artsonia", at("https://www.artsonia.com")),
-  app("school-resources", "accelerated-reader", "Accelerated Reader", at("https://www.renaissance.com/products/accelerated-reader")),
-  app("school-resources", "star-360", "Star 360", at("https://www.renaissance.com/products/star-assessments")),
+  app("school-resources", "accelerated-reader", "Accelerated Reader", at("https://www.renaissance.com/products/accelerated-reader"), { domain: "renaissance.com" }),
+  app("school-resources", "star-360", "Star 360", at("https://www.renaissance.com/products/star-assessments"), { domain: "renaissance.com" }),
   app("school-resources", "lunch-menu", "Lunch Menu", page),
   app("school-resources", "yearbook", "Yearbook", page),
   app("school-resources", "library-catalog", "Library Catalog", page),
+  app("school-resources", "study-hall", "Study Hall", page),
 ];
 
 // ===================================================================
@@ -91,7 +104,7 @@ const school: Resource[] = [
 const district: Resource[] = [
   app("district-resources", "clever-badges", "Clever Badges", page),
   app("district-resources", "powerschool", "PowerSchool", at("https://www.powerschool.com")),
-  app("district-resources", "map-growth", "MAP Growth", at("https://www.nwea.org/map-growth")),
+  app("district-resources", "map-growth", "MAP Growth", at("https://www.nwea.org/map-growth"), { domain: "nwea.org" }),
   app("district-resources", "edulastic", "Edulastic", at("https://edulastic.com")),
   app("district-resources", "google-meet", "Google Meet", at("https://meet.google.com")),
   app("district-resources", "gmail", "Gmail", at("https://mail.google.com")),
@@ -106,9 +119,9 @@ const district: Resource[] = [
   app("district-resources", "tech-helpdesk", "Technology Help Desk", page),
   app("district-resources", "family-portal", "Family Portal", page),
   app("district-resources", "acceptable-use", "Acceptable Use Policy", page),
-  app("district-resources", "immersive-reader", "Immersive Reader", at("https://www.microsoft.com/en-us/education/products/learning-tools")),
-  app("district-resources", "read-write", "Read&Write", at("https://www.texthelp.com/products/read-and-write-education")),
-  app("district-resources", "snap-read", "Snap&Read", at("https://learningtools.donjohnston.com")),
+  app("district-resources", "immersive-reader", "Immersive Reader", at("https://www.microsoft.com/en-us/education/products/learning-tools"), { domain: "microsoft.com" }),
+  app("district-resources", "read-write", "Read&Write", at("https://www.texthelp.com/products/read-and-write-education"), { domain: "texthelp.com" }),
+  app("district-resources", "snap-read", "Snap&Read", at("https://learningtools.donjohnston.com"), { domain: "donjohnston.com" }),
   app("district-resources", "bookshare", "Bookshare", at("https://www.bookshare.org")),
   app("district-resources", "learning-ally", "Learning Ally", at("https://learningally.org")),
 ];
@@ -125,7 +138,7 @@ const library: Resource[] = [
   app("clever-library", "flocabulary", "Flocabulary", at("https://www.flocabulary.com")),
   app("clever-library", "achieve3000", "Achieve3000", at("https://www.achieve3000.com")),
   app("clever-library", "starfall", "Starfall", at("https://www.starfall.com")),
-  app("clever-library", "wonders", "Wonders", at("https://www.mheducation.com/prek-12/program/microsites/MKTSP-BBB01M0.html")),
+  app("clever-library", "wonders", "Wonders", at("https://www.mheducation.com/prek-12/program/microsites/MKTSP-BBB01M0.html"), { domain: "mheducation.com" }),
   app("clever-library", "scholastic", "Scholastic", at("https://www.scholastic.com")),
   app("clever-library", "freckle", "Freckle", at("https://www.freckle.com")),
 
@@ -138,7 +151,7 @@ const library: Resource[] = [
   app("clever-library", "happy-numbers", "Happy Numbers", at("https://happynumbers.com")),
   app("clever-library", "math-playground", "Math Playground", at("https://www.mathplayground.com")),
   app("clever-library", "greg-tang-math", "Greg Tang Math", at("https://gregtangmath.com")),
-  app("clever-library", "desmos", "Desmos", at("https://www.desmos.com/calculator")),
+  app("clever-library", "desmos", "Desmos", at("https://www.desmos.com/calculator"), { domain: "desmos.com" }),
 
   // Science and social studies
   app("clever-library", "legends-of-learning", "Legends of Learning", at("https://www.legendsoflearning.com")),
@@ -149,10 +162,10 @@ const library: Resource[] = [
   app("clever-library", "google-earth", "Google Earth", at("https://earth.google.com")),
 
   // Create and present
-  app("clever-library", "canva", "Canva for Education", at("https://www.canva.com/education")),
+  app("clever-library", "canva", "Canva for Education", at("https://www.canva.com/education"), { domain: "canva.com" }),
   app("clever-library", "book-creator", "Book Creator", at("https://bookcreator.com")),
   app("clever-library", "wevideo", "WeVideo", at("https://www.wevideo.com")),
-  app("clever-library", "flip", "Flip", at("https://info.flip.com")),
+  app("clever-library", "flip", "Flip", at("https://info.flip.com"), { domain: "flip.com" }),
   app("clever-library", "padlet", "Padlet", at("https://padlet.com")),
   app("clever-library", "wakelet", "Wakelet", at("https://wakelet.com")),
   app("clever-library", "screencastify", "Screencastify", at("https://www.screencastify.com")),

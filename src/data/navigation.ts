@@ -11,7 +11,7 @@ import type { IconProps } from "../lib/icons";
 import type { SectionId } from "./types";
 
 export interface NavItemDefinition {
-  id: SectionId;
+  id: string;
   label: string;
   icon: ComponentType<IconProps>;
 }

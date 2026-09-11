@@ -86,7 +86,7 @@ No second icon set is mixed in and no emoji are used.
 
 ## Application artwork
 
-`npm run generate:app-icons` writes 116 square icons into `public/app-icons/` from
+`npm run generate:app-icons` writes 117 square icons into `public/app-icons/` from
 three sources, in descending order of fidelity:
 
 1. **Real full-colour vendor logos** from [`@iconify-json/logos`](https://www.npmjs.com/package/@iconify-json/logos)
@@ -101,29 +101,73 @@ three sources, in descending order of fidelity:
    That is the form most real ed-tech app icons take — IXL's icon is literally
    "IXL" reversed out of green.
 
-### These are not the real logos for most apps
+### Real logos
 
-Group 3 covers about eighty products — IXL, Capti Voice, Lexia Core5, i-Ready,
-Zearn, Newsela, Seesaw, Nearpod, BrainPOP and the rest. **Their real logos are not
-in this repository**, for two reasons that are worth stating plainly:
+Most of the products in a school portal are K-12 education vendors, and their
+logos are not redistributable through any package — `simple-icons` and the SVG
+Logos collection are both developer-tool oriented and carry almost none of them.
+So for those apps the portal asks the web for the logo the vendor actually
+publishes, and the generated tile becomes the fallback.
 
-- No npm package carries K-12 education brand logos. `simple-icons` and SVG Logos
-  are both developer-tool oriented; searching both for education brands returns
-  almost nothing.
-- This environment's egress policy blocks every vendor asset host, so the files
-  cannot be fetched.
+Two ways it works, and you can use either or both:
 
-The wordmark tiles are a deliberate stand-in, not an attempt to pass as the real
-mark, and the brand colours behind them are close approximations rather than
-sampled values. They all live in one table in `scripts/appIconSpecs.mjs`.
+**Runtime, no setup.** Out of the box, a tile whose bundled artwork is a
+stand-in loads the vendor's published logo through a favicon service and falls
+back to the tile if that does not load. `src/lib/logoSource.ts` has one constant
+to change:
 
-**To use the real logos**, drop them into `assets/app-icons/` as `<app-id>.svg` or
-`<app-id>.png` and run `npm run generate:app-icons`. Any file there replaces the
-generated artwork for that id and nothing else changes. The id is the file name the
-tile already asks for: `/app-icons/ixl.svg` means `assets/app-icons/ixl.svg`.
-See `assets/app-icons/README.md`.
+| `LOGO_SERVICE` | Behaviour |
+| --- | --- |
+| `"google"` (default) | Google's favicon service. Best coverage and the largest renditions. One request per app to google.com. |
+| `"duckduckgo"` | DuckDuckGo's icon service. No Google requests; smaller renditions. |
+| `"off"` | No outside requests. Every tile uses bundled artwork. |
 
-## Pages
+**Baked in, permanent.** Better result and no runtime requests:
+
+```bash
+npm run fetch:logos          # downloads real logos into assets/app-icons/
+npm run generate:app-icons   # bakes them into public/app-icons/
+```
+
+`fetch:logos` reads each app's real domain and tries, in order, the site's own
+apple-touch-icon (usually 180px and the nicest artwork), any declared
+`<link rel="icon">`, `/favicon.ico`, then the favicon service. Flags:
+`--only=ixl,capti-voice`, `--force`, `--skip-real`. Anything it cannot find keeps
+its generated tile and is listed at the end.
+
+You can also just drop files in by hand: `assets/app-icons/<app-id>.svg` or
+`.png` replaces the artwork for that id, and the id is the file name the tile
+already asks for — `/app-icons/ixl.svg` means `assets/app-icons/ixl.svg`.
+
+The fallback chain is: vendor logo → bundled tile → a coloured monogram plate, so
+a tile is never a broken image.
+
+## Study Hall
+
+`Study Hall` sits in School Resources. It opens a page with an access code
+field; entering **1212** replaces the portal's apps with a game catalog imported
+from [lauraevan/greatestgreatest-revive](https://github.com/lauraevan/greatestgreatest-revive) —
+6,082 games across 12 collections. The left nav switches to the collections, the
+games have their own search, each collection shows 24 tiles with a "show all",
+and *Close Study Hall* puts the school portal back. The state persists in
+`localStorage`.
+
+The code is checked in the browser, so it keeps the portal tidy rather than
+keeping anybody out — anyone reading the page source can find it. It is a
+switch, not a lock. Change it in `src/lib/useGamesMode.ts`.
+
+```bash
+npm run import:games         # re-imports the catalog from GitHub
+```
+
+The catalog lands in `src/data/games.json` (1.6 MB) and is loaded on demand, so
+it is a separate chunk and never touches the portal's main bundle. Icons and
+launcher pages are served from the source repositories through jsDelivr rather
+than copied here — the two directories come to about 150 MB, and pointing at the
+source means the catalog updates when it does. 1,802 of the games already launch
+from their own hosts.
+
+## Pages## Pages
 
 | Route | Page |
 | --- | --- |
@@ -136,6 +180,8 @@ See `assets/app-icons/README.md`.
 | `#/app/:id` | An app the district has not finished setting up |
 | `#/login` | The district sign-in screen |
 
+With Study Hall open, `#/` shows the game catalog instead of the portal's apps.
+
 Application tiles open the product's real site, the way single sign-on would land
 you there. Tiles for things a school hosts itself open a page inside the portal,
 because that is where they live in a real deployment too:
@@ -145,7 +191,7 @@ because that is where they live in a real deployment too:
 - **District** — Student Handbook, District Calendar, Bus Routes, Counseling
   Center, Technology Help Desk (with a working ticket form), Family Portal,
   Acceptable Use Policy
-- **School** — Lunch Menu, Library Catalog, Yearbook
+- **School** — Lunch Menu, Library Catalog, Yearbook, Study Hall
 - **Teacher-written** — Daily Schedule, Spelling List, Classroom Jobs, Birthday
   Calendar, How to Cite a Source, Recorder Fingering Chart, Spring Concert Songs,
   Fitness Log, Chromebook Care
@@ -159,7 +205,7 @@ fingering charts — rather than placeholder text.
 - **Homeroom** — Ms. Mangan, Room 12, whose Teacher Page carries the day-to-day
   work (Morning Work, Reading Block, Math Block, a science unit, class links)
 - **Specials** — Library Media Center, Music, PE and Health, Technology Resources
-- **116 applications** including IXL, Capti Voice, Lexia Core5, i-Ready, Zearn,
+- **117 applications** including IXL, Capti Voice, Lexia Core5, i-Ready, Zearn,
   Raz-Kids, Epic!, Newsela, Mystery Science, Prodigy, ST Math, XtraMath, Seesaw,
   Nearpod, Pear Deck, PebbleGo, Sora, Destiny Discover, BrainPOP, Generation
   Genius, GoNoodle, Second Step, QuaverMusic, Star 360, MAP Growth, PowerSchool,
@@ -175,14 +221,16 @@ homeroom, are in `src/data/student.ts` and can be changed in one place.
 src/
   components/   CleverHeader, CleverSidebar, NavItem, TopBarButton, SearchControl,
                 NotificationsMenu, ProfileMenu, Menu, Section, ResourceGrid,
-                ResourceTile, TeacherPageTile, CleverLogo, CleverBadgeCard,
-                GoalsList, TicketForm
-  pages/        Dashboard, TeacherPage, ResourcePage, LibraryPage,
+                ResourceTile, AppIcon, TeacherPageTile, CleverLogo,
+                CleverBadgeCard, GoalsList, TicketForm, StudyHallGate
+  pages/        Dashboard, GamesPortal, TeacherPage, ResourcePage, LibraryPage,
                 NotificationsPage, AccountSettings, AppView, SignIn
   data/         apps.ts, teacherPages.ts, resourcePages.ts,
                 teacherResourcePages.ts, navigation.ts, notifications.ts,
-                goals.ts, student.ts, types.ts
-  lib/          icons.tsx (generated), router.ts, search.ts, useFavorites.ts,
+                goals.ts, student.ts, types.ts,
+                games.json + realIcons.json (generated)
+  lib/          icons.tsx (generated), router.ts, search.ts, games.ts,
+                logoSource.ts, useFavorites.ts, useGamesMode.ts,
                 useStoredValue.ts
   styles/       tokens.css, base.css
 scripts/        generators and the verification scripts
@@ -230,11 +278,13 @@ npm run check    # typecheck, lint, geometry, accessibility, nav tracking
 - `check:geometry` asserts 18 measurements against the DOM, and screenshots
   1440×900, 1920×1080, 1536×864, 1366×768, 1024×768, 820×1180 and 414×896, failing
   on any horizontal overflow.
-- `check:a11y` runs 24 checks: landmarks, headings, decorative artwork, toggle
+- `check:a11y` runs 30 checks: landmarks, headings, decorative artwork, toggle
   state, keyboard operation of search and menus, Escape handling, a visible focus
   ring, that sign-in has no input fields at all, that five portal pages render,
   that the ticket form returns a reference, that the library filters, that marking
-  all notifications read works, and that the icon-size setting reaches the portal.
+  all notifications read works, that the icon-size setting reaches the portal, and
+  that Study Hall rejects a wrong code, opens on 1212, swaps the left nav,
+  filters, survives a reload, and restores the school portal when closed.
 - `node scripts/interactions.mjs` captures every page and dropdown for review.
 
 Screenshots land in `screenshots/` (gitignored); set `SHOT_DIR` to redirect them
@@ -242,8 +292,12 @@ and `CHROMIUM_PATH` to point Playwright at an existing browser.
 
 ## Deviations from the original, and why
 
-1. **Most app logos are stand-ins.** Explained above — no package carries them and
-   vendor hosts are unreachable from here. `assets/app-icons/` takes real files.
+1. **App logos are loaded, not bundled.** No package carries K-12 education
+   logos, and vendor hosts are unreachable from the environment this was built
+   in, so the generated tiles are stand-ins that a vendor's published logo
+   replaces at runtime. `npm run fetch:logos` makes that permanent. The runtime
+   path could not be tested from here — the sandbox blocks the favicon services
+   too — so it is written to fall back cleanly rather than break.
 2. **Font** — Proxima Nova is licensed and cannot be shipped; Figtree stands in
    behind it.
 3. **Focus rings** — Clever's `.button--reset` clears the outline on `:focus`

@@ -1,11 +1,12 @@
 import { NavItem } from "./NavItem";
-import { navItems } from "../data/navigation";
-import type { SectionId } from "../data/types";
+import { navItems, type NavItemDefinition } from "../data/navigation";
 import "./CleverSidebar.css";
 
 interface Props {
-  selected: SectionId | null;
-  onSelect: (id: SectionId) => void;
+  selected: string | null;
+  onSelect: (id: string) => void;
+  /** Overrides the portal's own sections, as Study Hall does. */
+  items?: NavItemDefinition[];
   /** Controls the off-canvas state used below the tablet breakpoint. */
   open: boolean;
   onDismiss: () => void;
@@ -16,7 +17,7 @@ interface Props {
  * src/LeftNav/LeftNav.less in clever-components: a 225px pane on Clever's
  * off-white, with links in `@primary_blue_shade_2`.
  */
-export function CleverSidebar({ selected, onSelect, open, onDismiss }: Props) {
+export function CleverSidebar({ selected, onSelect, open, onDismiss, items }: Props) {
   return (
     <>
       <nav
@@ -26,7 +27,7 @@ export function CleverSidebar({ selected, onSelect, open, onDismiss }: Props) {
         aria-label="Portal sections"
       >
         <ul className="list-reset clever-sidebar__list">
-          {navItems.map((item) => (
+          {(items ?? navItems).map((item) => (
             <NavItem
               key={item.id}
               label={item.label}

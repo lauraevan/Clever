@@ -70,6 +70,19 @@ export const resourcePages: ResourcePageContent[] = [
     ],
   },
   {
+    id: "study-hall",
+    title: "Study Hall",
+    subtitle: "Free choice time",
+    owner: `${student.school} · Room 12`,
+    blocks: [
+      {
+        kind: "lead",
+        text: "Study Hall is for when your work is finished. Enter the access code Ms. Mangan gave the class to see what is available.",
+      },
+      { kind: "study-hall" },
+    ],
+  },
+  {
     id: "student-handbook",
     title: "Student Handbook",
     subtitle: "2025–2026 school year",

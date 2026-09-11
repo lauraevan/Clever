@@ -1,18 +1,35 @@
 import { CleverBadgeCard } from "../components/CleverBadgeCard";
 import { GoalsList } from "../components/GoalsList";
+import { StudyHallGate } from "../components/StudyHallGate";
 import { TicketForm } from "../components/TicketForm";
 import { ExternalLinkIcon, InfoCircleIcon, LinkIcon, LongArrowLeftIcon, WarningIcon } from "../lib/icons";
 import type { PageBlock, ResourcePageContent } from "../data/types";
 import "./ResourcePage.css";
+
+export interface StudyHallControls {
+  unlocked: boolean;
+  onUnlock: (code: string) => boolean;
+  onOpen: () => void;
+  onLock: () => void;
+}
 
 interface Props {
   page: ResourcePageContent;
   onBack: () => void;
   /** Follows an in-portal link by resource id, when one resolves. */
   onOpenLink: (label: string) => void;
+  studyHall: StudyHallControls;
 }
 
-function Block({ block, onOpenLink }: { block: PageBlock; onOpenLink: (label: string) => void }) {
+function Block({
+  block,
+  onOpenLink,
+  studyHall,
+}: {
+  block: PageBlock;
+  onOpenLink: (label: string) => void;
+  studyHall: StudyHallControls;
+}) {
   switch (block.kind) {
     case "lead":
       return <p className="resource-page__lead">{block.text}</p>;
@@ -144,11 +161,21 @@ function Block({ block, onOpenLink }: { block: PageBlock; onOpenLink: (label: st
 
     case "ticket-form":
       return <TicketForm />;
+
+    case "study-hall":
+      return (
+        <StudyHallGate
+          unlocked={studyHall.unlocked}
+          onUnlock={studyHall.onUnlock}
+          onOpen={studyHall.onOpen}
+          onLock={studyHall.onLock}
+        />
+      );
   }
 }
 
 /** A page the portal hosts itself, rendered from structured content. */
-export function ResourcePage({ page, onBack, onOpenLink }: Props) {
+export function ResourcePage({ page, onBack, onOpenLink, studyHall }: Props) {
   return (
     <main className="resource-page" tabIndex={-1}>
       <button type="button" className="button-reset resource-page__back" onClick={onBack}>
@@ -164,7 +191,7 @@ export function ResourcePage({ page, onBack, onOpenLink }: Props) {
 
       <div className="resource-page__content">
         {page.blocks.map((block, index) => (
-          <Block key={index} block={block} onOpenLink={onOpenLink} />
+          <Block key={index} block={block} onOpenLink={onOpenLink} studyHall={studyHall} />
         ))}
       </div>
     </main>

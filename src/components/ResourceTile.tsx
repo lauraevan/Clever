@@ -1,4 +1,5 @@
 import type { MouseEvent } from "react";
+import { AppIcon } from "./AppIcon";
 import { HeartIcon, HeartOutlineIcon } from "../lib/icons";
 import type { ResourceTarget } from "../data/types";
 import "./ResourceTile.css";
@@ -13,6 +14,12 @@ interface Props {
   /** Square icon artwork, or a node for tiles with no artwork of their own. */
   icon?: string;
   iconNode?: React.ReactNode;
+  /** Resource id, so the icon can tell real artwork from a stand-in tile. */
+  iconId?: string;
+  /** Product host, used to load the vendor's published logo. */
+  domain?: string;
+  /** True when `icon` is already a remote URL, as game artwork is. */
+  remoteIcon?: boolean;
   size?: TileSize;
   notes?: string;
   notify?: boolean;
@@ -27,6 +34,9 @@ export function ResourceTile({
   title,
   icon,
   iconNode,
+  iconId,
+  domain,
+  remoteIcon,
   size = "large",
   notes,
   notify,
@@ -66,9 +76,16 @@ export function ResourceTile({
         onClick={handleClick}
       >
         <span className="resource-tile__icon-container">
-          {iconNode ?? (
-            <img className="resource-tile__icon" src={icon} alt="" role="presentation" />
-          )}
+          {iconNode ??
+            (icon ? (
+              <AppIcon
+                id={iconId ?? ""}
+                src={icon}
+                domain={domain}
+                title={title}
+                remote={remoteIcon}
+              />
+            ) : null)}
         </span>
 
         <span className="resource-tile__title-container">

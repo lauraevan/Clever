@@ -1,0 +1,140 @@
+.games {
+  flex: 1;
+  min-width: 0;
+  padding: var(--size-l) var(--size-m) var(--size-3xl);
+  background-color: var(--page-bg);
+}
+
+.games:focus {
+  outline: 0;
+}
+
+.games__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--size-m);
+  margin-bottom: var(--size-m);
+}
+
+.games__title {
+  margin: 0;
+  color: var(--neutral-black);
+  font-size: var(--type-large);
+  font-weight: 600;
+}
+
+.games__subtitle {
+  margin: var(--size-4xs) 0 0;
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small-medium);
+}
+
+.games__lock {
+  flex-shrink: 0;
+  padding: var(--size-xs) var(--size-m);
+  border: var(--border-width-s) solid var(--primary-blue);
+  border-radius: var(--radius-l);
+  background-color: var(--neutral-white);
+  color: var(--primary-blue);
+  font-family: inherit;
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--timing-promptly) ease-out;
+}
+
+.games__lock:hover {
+  background-color: rgb(67 108 242 / 6%);
+}
+
+/* Field chrome matches Clever's TextInput2. */
+.games__search {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 20rem;
+  max-width: 100%;
+  height: var(--size-2xl);
+  margin-bottom: var(--size-m);
+  padding: 0 var(--size-xs);
+  border: var(--border-width-s) solid var(--neutral-silver);
+  border-radius: var(--radius-l);
+  background-color: var(--neutral-white);
+  transition: all var(--timing-quickly) ease-out;
+}
+
+.games__search:focus-within {
+  border-color: var(--primary-blue);
+  box-shadow: var(--focus-ring);
+}
+
+.games__search-icon {
+  flex-shrink: 0;
+  margin-right: var(--size-2xs);
+  color: var(--neutral-medium-gray);
+}
+
+.games__search-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--neutral-black);
+  font-family: inherit;
+  font-size: var(--type-small-medium);
+}
+
+.games__search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.games__search-input::placeholder {
+  color: var(--neutral-gray);
+}
+
+.games__search-clear {
+  flex-shrink: 0;
+  padding: var(--size-2xs);
+  color: var(--neutral-medium-gray);
+}
+
+.games__empty {
+  color: var(--neutral-medium-gray);
+  font-size: var(--type-small-medium);
+}
+
+.games__footnote {
+  margin: var(--size-xl) 0 0;
+  color: var(--neutral-gray);
+  font-size: var(--type-small);
+}
+
+.games__footnote-link {
+  color: var(--neutral-medium-gray);
+}
+
+.games__footnote-link:hover {
+  color: var(--primary-blue);
+}
+
+/* Game artwork is photographic, so it gets a hairline instead of floating. */
+.games .resource-tile__icon-container .app-icon {
+  border: var(--border-width-s) solid var(--neutral-silver);
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 47.9375rem) {
+  .games {
+    padding: var(--size-m) var(--size-xs) var(--size-xl);
+  }
+
+  .games__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--size-xs);
+  }
+}

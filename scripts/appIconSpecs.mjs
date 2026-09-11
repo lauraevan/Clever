@@ -196,6 +196,7 @@ export const iconSpecs = [
   { id: "tech-helpdesk", lines: ["Help", "Desk"], bg: "#686f88", fg: "#ffffff" },
   { id: "district-calendar", lines: ["Calendar"], bg: "#3158d7", fg: "#ffffff" },
   { id: "yearbook", lines: ["Yearbook"], bg: "#9c6644", fg: "#ffffff" },
+  { id: "study-hall", lines: ["Study", "Hall"], bg: "#32315b", fg: "#ffffff" },
   { id: "family-portal", lines: ["Family", "Portal"], bg: "#32315b", fg: "#ffffff" },
   { id: "acceptable-use", lines: ["Acceptable", "Use"], bg: "#5c677d", fg: "#ffffff" },
 ];

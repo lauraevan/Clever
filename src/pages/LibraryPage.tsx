@@ -182,6 +182,8 @@ export function LibraryPage({
             key={resource.id}
             title={resource.title}
             icon={resource.icon}
+            iconId={resource.id}
+            domain={resource.domain}
             size={tileSize}
             target={resource.target}
             onActivate={() => onOpenResource(resource)}

@@ -103,6 +103,8 @@ export function Dashboard({
       key={resource.id}
       title={resource.title}
       icon={resource.icon}
+      iconId={resource.id}
+      domain={resource.domain}
       notes={resource.notes}
       notify={resource.notify}
       size={tileSize}

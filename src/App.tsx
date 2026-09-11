@@ -4,6 +4,7 @@ import { CleverSidebar } from "./components/CleverSidebar";
 import { AccountSettings } from "./pages/AccountSettings";
 import { AppView } from "./pages/AppView";
 import { Dashboard } from "./pages/Dashboard";
+import { GamesPortal } from "./pages/GamesPortal";
 import { LibraryPage } from "./pages/LibraryPage";
 import { NotificationsPage } from "./pages/NotificationsPage";
 import { ResourcePage } from "./pages/ResourcePage";
@@ -13,11 +14,15 @@ import { resourcesById } from "./data/apps";
 import { notifications as initialNotifications } from "./data/notifications";
 import { resourcePagesById } from "./data/resourcePages";
 import { teacherPagesById } from "./data/teacherPages";
+import { GridIcon } from "./lib/icons";
 import { useFavorites } from "./lib/useFavorites";
+import { useGamesMode } from "./lib/useGamesMode";
 import { useStoredValue } from "./lib/useStoredValue";
 import { useRoute, type Route } from "./lib/router";
 import type { SearchResult } from "./lib/search";
 import type { TileSize } from "./components/ResourceTile";
+import type { NavItemDefinition } from "./data/navigation";
+import { sourceSectionId } from "./lib/games";
 import type { Resource, SectionId, TeacherPageResource } from "./data/types";
 import "./App.css";
 
@@ -33,10 +38,14 @@ export default function App() {
     (value): value is TileSize => TILE_SIZES.includes(value as TileSize),
   );
 
+  const { unlocked, unlock, lock } = useGamesMode();
+
   const [notifications, setNotifications] = useState(initialNotifications);
-  const [selectedSection, setSelectedSection] = useState<SectionId | null>("teacher-pages");
-  const [scrollTarget, setScrollTarget] = useState<SectionId | null>(null);
+  const [selectedSection, setSelectedSection] = useState<string | null>("teacher-pages");
+  const [scrollTarget, setScrollTarget] = useState<string | null>(null);
   const [navOpen, setNavOpen] = useState(false);
+  /** Study Hall's collections, once its catalog has loaded. */
+  const [gameSources, setGameSources] = useState<string[]>([]);
 
   /** Every route change also dismisses the off-canvas nav. */
   const navigate = useCallback(
@@ -110,7 +119,7 @@ export default function App() {
   );
 
   const handleSelectSection = useCallback(
-    (id: SectionId) => {
+    (id: string) => {
       setSelectedSection(id);
       if (route.name !== "dashboard") {
         navigate({ name: "dashboard" });
@@ -123,6 +132,24 @@ export default function App() {
     },
     [navigate, route.name],
   );
+
+  /** Study Hall replaces the portal's own sections while it is open. */
+  const gameNavItems: NavItemDefinition[] = gameSources.map((source) => ({
+    id: sourceSectionId(source),
+    label: source,
+    icon: GridIcon,
+  }));
+
+  const studyHall = {
+    unlocked,
+    onUnlock: unlock,
+    onOpen: () => navigate({ name: "dashboard" }),
+    onLock: () => {
+      lock();
+      setSelectedSection("teacher-pages");
+      navigate({ name: "dashboard" });
+    },
+  };
 
   const markAllRead = () =>
     setNotifications((current) => current.map((item) => ({ ...item, unread: false })));
@@ -157,16 +184,30 @@ export default function App() {
           onSelect={handleSelectSection}
           open={navOpen}
           onDismiss={() => setNavOpen(false)}
+          items={unlocked && gameNavItems.length > 0 ? gameNavItems : undefined}
         />
 
-        {route.name === "dashboard" ? (
+        {route.name === "dashboard" && unlocked ? (
+          <GamesPortal
+            isFavorite={isFavorite}
+            onToggleFavorite={toggleFavorite}
+            onLock={studyHall.onLock}
+            tileSize={tileSize}
+            scrollTarget={scrollTarget}
+            onScrolled={() => setScrollTarget(null)}
+            onVisibleSourceChange={setSelectedSection}
+            onSourcesLoaded={setGameSources}
+          />
+        ) : null}
+
+        {route.name === "dashboard" && !unlocked ? (
           <Dashboard
             isFavorite={isFavorite}
             onToggleFavorite={toggleFavorite}
             onOpenResource={handleOpenResource}
             onOpenTeacherPage={(pageId) => navigate({ name: "teacher", pageId })}
             onOpenLibrary={() => navigate({ name: "library" })}
-            scrollTarget={scrollTarget}
+            scrollTarget={scrollTarget as SectionId | null}
             onScrolled={() => setScrollTarget(null)}
             onVisibleSectionChange={setSelectedSection}
             tileSize={tileSize}
@@ -193,7 +234,12 @@ export default function App() {
               const page = resourcePagesById.get(route.pageId);
               if (!page) return <AppView resource={undefined} onBack={backToPortal} />;
               return (
-                <ResourcePage page={page} onBack={backToPortal} onOpenLink={handleOpenLabel} />
+                <ResourcePage
+                  page={page}
+                  onBack={backToPortal}
+                  onOpenLink={handleOpenLabel}
+                  studyHall={studyHall}
+                />
               );
             })()
           : null}

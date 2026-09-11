@@ -27,7 +27,7 @@ check(
 
 // --- Tile artwork is decorative; the visible title carries the name ---
 const icons = await page
-  .locator(".resource-tile__icon")
+  .locator(".resource-tile img")
   .evaluateAll((nodes) =>
     nodes.map((n) => ({ alt: n.getAttribute("alt"), role: n.getAttribute("role") })),
   );
@@ -146,6 +146,43 @@ await page.goto(`${URL}#/account`, { waitUntil: "networkidle" });
 await page.locator(".account__choice", { hasText: /^Large/ }).click();
 await page.goto(URL, { waitUntil: "networkidle" });
 await page.waitForSelector(".resource-tile");
+
+// --- Study Hall: the code gates the games catalog ---
+await page.goto(`${URL}#/page/study-hall`, { waitUntil: "networkidle" });
+await page.waitForSelector(".study-hall__input");
+await page.locator(".study-hall__input").fill("9999");
+await page.locator(".study-hall__submit").click();
+await page.waitForSelector(".study-hall__error");
+check("study hall rejects a wrong code", (await page.locator(".games__title").count()) === 0);
+
+await page.locator(".study-hall__input").fill("1212");
+await page.locator(".study-hall__submit").click();
+await page.waitForSelector(".games .resource-tile");
+const gameTiles = await page.locator(".games .resource-tile").count();
+const gameNav = await page.locator(".nav-item__label").allTextContents();
+check("study hall opens the games catalog", gameTiles > 100, `${gameTiles} tiles`);
+check(
+  "left nav switches to the game collections",
+  gameNav.length === 12 && gameNav[0] === "Original",
+  gameNav.slice(0, 3).join(", "),
+);
+
+await page.locator(".games__search-input").fill("retro");
+await page.waitForTimeout(300);
+const gameMatches = await page.locator(".games .resource-tile").count();
+check("games search filters", gameMatches > 0 && gameMatches < gameTiles, `${gameMatches}`);
+await page.locator(".games__search-clear").click();
+
+await page.reload({ waitUntil: "networkidle" });
+await page.waitForSelector(".games__title");
+check("study hall survives a reload", true);
+
+await page.locator(".games__lock").click();
+await page.waitForSelector(".dashboard");
+check(
+  "closing study hall restores the school portal",
+  (await page.locator(".section__title").first().textContent())?.trim() === "Teacher Pages",
+);
 
 // --- Focus is always visible ---
 await page.keyboard.press("Tab");

@@ -44,6 +44,8 @@ export function TeacherPage({ page, onBack, onOpenResource, tileSize }: Props) {
                 key={resource.id}
                 title={resource.title}
                 icon={resource.icon}
+                iconId={resource.icon?.replace(/^\/app-icons\/|\.svg$/g, "")}
+                domain={resource.domain}
                 notes={resource.notes}
                 size={tileSize}
                 target={resource.target}

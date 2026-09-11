@@ -37,7 +37,9 @@ export type PageBlock =
   /** Progress against the goals a teacher set. */
   | { kind: "goals" }
   /** The help desk's ticket form. */
-  | { kind: "ticket-form" };
+  | { kind: "ticket-form" }
+  /** Study Hall's access code form. */
+  | { kind: "study-hall" };
 
 export interface ResourcePageContent {
   /** Matches the resource id whose tile opens this page. */
@@ -54,6 +56,8 @@ export interface Resource {
   title: string;
   /** Path to square icon artwork under public/app-icons/. */
   icon: string;
+  /** Product host, e.g. "ixl.com", used to load the vendor's published logo. */
+  domain?: string;
   section: ResourceSectionId;
   target: ResourceTarget;
   /** Optional metadata line Clever shows beneath a tile's title. */
@@ -65,6 +69,8 @@ export interface Resource {
 export interface TeacherPageResource {
   id: string;
   title: string;
+  /** Product host, used to load the vendor's published logo. */
+  domain?: string;
   /**
    * Portal page this link opens, when it is not the one named by `id`. Lets a
    * teacher link point at a page the district already publishes.

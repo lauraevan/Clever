@@ -1,0 +1,143 @@
+.study-hall {
+  max-width: 26rem;
+  margin: var(--size-m) 0 0;
+  padding: var(--size-m);
+  border: var(--border-width-s) solid var(--neutral-silver);
+  border-radius: var(--radius-l);
+  background-color: var(--neutral-off-white);
+}
+
+.study-hall__label {
+  display: block;
+  margin-bottom: var(--size-2xs);
+  color: var(--neutral-dark-gray);
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+}
+
+.study-hall__row {
+  display: flex;
+  align-items: center;
+  gap: var(--size-xs);
+}
+
+/* Field chrome matches Clever's TextInput2. */
+.study-hall__field {
+  display: inline-flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  height: var(--size-2xl);
+  padding: 0 var(--size-xs);
+  border: var(--border-width-s) solid var(--neutral-silver);
+  border-radius: var(--radius-l);
+  background-color: var(--neutral-white);
+  transition: all var(--timing-quickly) ease-out;
+}
+
+.study-hall__field:focus-within {
+  border-color: var(--primary-blue);
+  box-shadow: var(--focus-ring);
+}
+
+.study-hall__field--error {
+  border-color: var(--alert-red);
+}
+
+.study-hall__field-icon {
+  flex-shrink: 0;
+  margin-right: var(--size-2xs);
+  color: var(--neutral-medium-gray);
+}
+
+.study-hall__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--neutral-black);
+  font-family: inherit;
+  font-size: var(--type-medium);
+  letter-spacing: 0.25em;
+}
+
+.study-hall__input::placeholder {
+  color: var(--neutral-gray);
+  letter-spacing: 0.25em;
+}
+
+/* Clever's primary Button. */
+.study-hall__submit {
+  flex-shrink: 0;
+  padding: var(--size-xs) var(--size-m);
+  border: var(--border-width-s) solid var(--primary-blue);
+  border-radius: var(--radius-l);
+  background-color: var(--primary-blue);
+  color: var(--neutral-white);
+  font-family: inherit;
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--timing-promptly) ease-out;
+}
+
+.study-hall__submit:hover:not(:disabled) {
+  border-color: var(--primary-blue-shade-1);
+  background-color: var(--primary-blue-shade-1);
+}
+
+.study-hall__submit:disabled {
+  border-color: var(--neutral-silver);
+  background-color: var(--neutral-silver);
+  color: var(--neutral-medium-gray);
+  cursor: default;
+}
+
+.study-hall__error {
+  display: flex;
+  align-items: center;
+  gap: var(--size-2xs);
+  margin: var(--size-xs) 0 0;
+  color: var(--alert-red);
+  font-size: var(--type-small-medium);
+}
+
+.study-hall--open {
+  border-color: var(--alert-green);
+  background-color: rgb(29 169 120 / 6%);
+}
+
+.study-hall__open-title {
+  margin: 0;
+  color: var(--alert-green);
+  font-size: var(--type-medium);
+  font-weight: 600;
+}
+
+.study-hall__open-body {
+  margin: var(--size-2xs) 0 0;
+  color: var(--neutral-dark-gray);
+  font-size: var(--type-small-medium);
+  line-height: 1.5;
+}
+
+.study-hall__open-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--size-m);
+  margin-top: var(--size-s);
+}
+
+.study-hall__lock {
+  color: var(--primary-blue);
+  font-size: var(--type-small-medium);
+  font-weight: 600;
+}
+
+.study-hall__lock:hover,
+.study-hall__lock:focus {
+  color: var(--primary-blue-shade-2);
+  text-decoration: underline;
+}
