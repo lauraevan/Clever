@@ -1,12 +1,16 @@
-/** Shared shapes for the demo portal's content. */
+/** Shared shapes for the portal's content. */
 
 /** Which portal section a resource is filed under. */
 export type SectionId =
   | "teacher-pages"
   | "favorites"
   | "classroom-resources"
+  | "school-resources"
   | "district-resources"
-  | "applications";
+  | "clever-library";
+
+/** Sections that hold applications rather than Teacher Pages or favourites. */
+export type ResourceSectionId = Exclude<SectionId, "favorites" | "teacher-pages">;
 
 /** How a resource behaves when a student clicks it. */
 export type ResourceTarget =
@@ -22,7 +26,7 @@ export interface Resource {
   title: string;
   /** Path to square icon artwork under public/app-icons/. */
   icon: string;
-  section: Exclude<SectionId, "favorites" | "teacher-pages">;
+  section: ResourceSectionId;
   target: ResourceTarget;
   /** Optional metadata line Clever shows beneath a tile's title. */
   notes?: string;
@@ -47,12 +51,12 @@ export interface TeacherPageSection {
 
 export interface TeacherPage {
   id: string;
-  /** Display name, e.g. "Mrs. Johnson's Page". */
+  /** Display name, e.g. "Ms. Mangan's Class". */
   title: string;
-  /** Teacher's name as shown on the page itself. */
+  /** Teacher's name as shown beneath the tile and on the page. */
   teacher: string;
   subtitle: string;
-  /** Two-letter monogram used for the avatar. */
+  /** Monogram used for the avatar. */
   initials: string;
   /** Avatar background, drawn from Clever's accent palette. */
   color: string;

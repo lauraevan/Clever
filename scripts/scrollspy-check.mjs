@@ -15,7 +15,7 @@ const selected = () =>
 
 const results = [{ where: "top of page", selected: await selected() }];
 
-for (const label of ["District Resources", "Applications", "Classroom Resources"]) {
+for (const label of ["District Resources", "Clever Library", "School Resources", "Classroom Resources"]) {
   await page.getByRole("button", { name: label }).click();
   await page.waitForTimeout(900);
   results.push({ where: `after clicking ${label}`, selected: await selected() });

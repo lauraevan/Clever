@@ -26,8 +26,9 @@ const HEADER_OFFSET = 72;
 
 const RESOURCE_SECTIONS = [
   "classroom-resources",
+  "school-resources",
   "district-resources",
-  "applications",
+  "clever-library",
 ] as const;
 
 export function Dashboard({

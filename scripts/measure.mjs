@@ -146,6 +146,9 @@ for (const [width, height] of VIEWPORTS) {
     console.log(`\n  FAIL horizontal overflow of ${overflow}px at ${width}x${height}`);
   }
   await page.screenshot({ path: `${OUT}/portal-${width}x${height}.png` });
+  if (width === 1440) {
+    await page.screenshot({ path: `${OUT}/portal-full-page.png`, fullPage: true });
+  }
 }
 
 console.log(`\n  Screenshots in ${OUT}`);

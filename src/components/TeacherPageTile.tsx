@@ -16,7 +16,8 @@ export function TeacherPageTile({ page, onOpen }: Props) {
   return (
     <ResourceTile
       title={page.title}
-      notes={page.teacher}
+      // The teacher's name only earns a line when the page name doesn't carry it.
+      notes={page.title.includes(page.teacher) ? undefined : page.teacher}
       target={{ kind: "demo" }}
       onActivate={onOpen}
       iconNode={

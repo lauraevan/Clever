@@ -85,17 +85,46 @@ No second icon set is mixed in and no emoji are used.
 
 ## Application artwork
 
-`npm run generate:app-icons` writes square artwork into `public/app-icons/`:
+`npm run generate:app-icons` writes 112 square icons into `public/app-icons/`:
 
-- Products carried by [`simple-icons`](https://simpleicons.org) (Google Classroom,
-  Google Drive, Khan Academy, Quizlet, Canvas, Scratch, Kahoot!, Duolingo and
-  others) use the **official brand mark and official brand hex** from that package.
-- Products it does not carry (Schoology, IXL, i-Ready, Newsela, Nearpod, Seesaw
-  and the district links) are drawn as brand-coloured letterform tiles in the same
-  square app-icon idiom — real tiles, not lettered placeholders.
+- Products carried by [`simple-icons`](https://simpleicons.org) — Google Classroom,
+  Drive, Docs, Slides, Sheets, Forms, Meet, Gmail, Earth, Khan Academy, Quizlet,
+  Scratch, Kahoot!, Duolingo, Padlet, Screencastify, Zoom, Wikipedia, YouTube,
+  Instructure — use the **official brand mark and official brand hex** from that
+  package.
+- Clever Badges and Clever Goals use the "C" from Clever's own logo outline.
+- Everything else is drawn as a wordmark or monogram on a brand-coloured ground,
+  auto-fitted to the tile. That is the form most real ed-tech app icons actually
+  take: IXL's icon is literally "IXL" reversed out of green.
+
+`simple-icons` carries almost no K-12 education products and this environment
+cannot reach vendor asset hosts, so the grounds for the wordmark tiles are close
+approximations of each product's brand colour rather than sampled values. They all
+live in one table in `scripts/appIconSpecs.mjs` and are easy to correct against a
+real portal.
 
 Artwork is full-bleed square with no rounding baked in, because Clever rounds icons
 in CSS at `border-radius: 10%`.
+
+## Sample data
+
+The portal is populated as a 5th grader's:
+
+- **Student** — Evan, 5th Grade
+- **Homeroom** — Ms. Mangan, Room 12, whose Teacher Page carries the day-to-day
+  work (Morning Work, Reading Block, Math Block, a science unit, class links)
+- **Specials** — Library Media Center, Music, PE and Health, Technology Resources
+- **112 applications** across Classroom Resources, School Resources, District
+  Resources and the Clever Library, including IXL, Capti Voice, Lexia Core5,
+  i-Ready, Zearn, Raz-Kids, Epic!, Newsela, Mystery Science, Prodigy, ST Math,
+  XtraMath, Seesaw, Nearpod, Pear Deck, PebbleGo, Sora, Destiny Discover,
+  BrainPOP, Generation Genius, GoNoodle, Second Step, QuaverMusic, Star 360,
+  MAP Growth, PowerSchool, Read&Write, Snap&Read, Bookshare, Learning Ally and
+  the wider Clever Library catalog
+
+School and district names are placeholders — `Lincoln Elementary School` and
+`Lincoln Unified School District`. Both, along with the student's name and grade,
+are in `src/data/student.ts` and can be changed in one place.
 
 ## Structure
 
@@ -105,7 +134,8 @@ src/
                 NotificationsMenu, ProfileMenu, Menu, Section, ResourceGrid,
                 ResourceTile, TeacherPageTile, CleverLogo, Toast
   pages/        Dashboard, TeacherPage, AppView, DemoLogin
-  data/         apps.ts, teacherPages.ts, navigation.ts, notifications.ts, student.ts
+  data/         apps.ts, teacherPages.ts, navigation.ts, notifications.ts,
+                student.ts, types.ts
   lib/          icons.tsx (generated), router.ts, search.ts, useFavorites.ts
   styles/       tokens.css, base.css
 scripts/        generators and the verification scripts
@@ -124,7 +154,10 @@ dependency.
   close on Escape or an outside click.
 - **Favorites** toggle from a small outline heart on each tile, move the app into
   the Favorites section, and persist to `localStorage`.
-- **Left nav** scrolls to a section and tracks the one on screen as you scroll.
+- **Left nav** covers Teacher Pages, Favorites, Classroom Resources, School
+  Resources, District Resources and the Clever Library; it scrolls to a section and
+  tracks the one on screen as you scroll, including at the very bottom of the page
+  where the last section can no longer reach the top.
 - **Teacher Pages** open onto their own page, keeping the bar and nav, with a Back
   control and the teacher's own resource sections.
 - **Tiles** open external sites in a new tab, internal apps onto a local screen,
@@ -165,10 +198,11 @@ Three, all deliberate:
    interaction looks the same while keyboard focus stays visible. Clever's reset
    also transitions `all`, which would animate the ring in; outline is excluded
    from that transition so the ring appears immediately.
-3. **Page composition** — the component library supplies the parts and their exact
-   measurements but not the portal's page assembly, and no reference screenshot was
-   available. Which sections appear, and in what order, follows the structure given
-   in the task brief. Every visual value used to build them is still Clever's own.
+3. **Page composition and content** — the component library supplies the parts and
+   their exact measurements but not the portal's page assembly, and no reference
+   screenshot was available. Which sections appear and in what order, the app
+   catalog, and the school and district names are all sample content. Every visual
+   value used to build them is still Clever's own.
 
 ## Licences
 

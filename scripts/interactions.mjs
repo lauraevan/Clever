@@ -20,7 +20,7 @@ await page.waitForSelector(".resource-tile");
 
 // --- Search ---------------------------------------------------------------
 await page.getByRole("button", { name: "Search" }).click();
-await page.keyboard.type("goo");
+await page.keyboard.type("capti");
 await page.waitForSelector(".search-control__result");
 await shot("search-open", { x: 600, y: 0, width: 840, height: 500 });
 const resultCount = await page.locator(".search-control__result").count();
@@ -48,7 +48,7 @@ await shot("tile-hover", { x: 225, y: 120, width: 700, height: 280 });
 const classroom = page.locator(".resource-tile", { hasText: "Google Classroom" }).first();
 await classroom.scrollIntoViewIfNeeded();
 await classroom.getByRole("button", { name: /Add .* to favorites/ }).click();
-const khan = page.locator(".resource-tile", { hasText: "Khan Academy" }).first();
+const khan = page.locator(".resource-tile", { hasText: "IXL" }).first();
 await khan.scrollIntoViewIfNeeded();
 await khan.getByRole("button", { name: /Add .* to favorites/ }).click();
 await page.evaluate(() => window.scrollTo({ top: 0 }));
@@ -71,19 +71,19 @@ await shot("nav-district", { x: 0, y: 0, width: 1440, height: 700 });
 
 // --- Teacher Page ---------------------------------------------------------
 await page.evaluate(() => window.scrollTo({ top: 0 }));
-await page.locator(".resource-tile", { hasText: "Mrs. Johnson's Page" }).first().click();
+await page.locator(".resource-tile", { hasText: "Ms. Mangan's Class" }).first().click();
 await page.waitForSelector(".teacher-page__title");
 await shot("teacher-page", { x: 0, y: 0, width: 1440, height: 800 });
 
 // --- Mock app launch ------------------------------------------------------
 await page.getByRole("button", { name: /Back to portal/ }).click();
 await page.waitForSelector(".dashboard");
-await page.locator(".resource-tile", { hasText: "Schoology" }).first().click();
+await page.locator(".resource-tile", { hasText: "Capti Voice" }).first().click();
 await page.waitForSelector(".app-view__title");
 await shot("app-view", { x: 0, y: 0, width: 1440, height: 700 });
 
 // --- Unavailable app ------------------------------------------------------
-await page.goto(`${URL}#/app/pearson`, { waitUntil: "networkidle" });
+await page.goto(`${URL}#/app/canvas`, { waitUntil: "networkidle" });
 await page.waitForSelector(".app-view__notice--warning");
 await shot("app-unavailable", { x: 0, y: 0, width: 1440, height: 700 });
 
